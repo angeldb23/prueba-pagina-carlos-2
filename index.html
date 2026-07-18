@@ -1,0 +1,1652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSAN Ingeniería — Instalaciones y Mantenimiento Eléctrico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap">
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<style>
+:root {
+  --bg: #0a1628;
+  --deep: #0d1d35;
+  --card: #122844;
+  --text: #ffffff;
+  --text-soft: rgba(255,255,255,0.62);
+  --text-mute: rgba(255,255,255,0.32);
+  --line: rgba(255,255,255,0.1);
+  --line-strong: rgba(255,255,255,0.18);
+  --highlight: #ff7a1a;
+  --highlight-soft: rgba(255,122,26,0.4);
+  --accent-blue: #3b82f6;
+  --ease-quiet: cubic-bezier(.22, 1, .36, 1);
+  --ease-precise: cubic-bezier(.4, 0, .2, 1);
+  --ease-emphasis: cubic-bezier(.16, 1, .3, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+::selection { background: var(--highlight); color: #fff; }
+
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+a, button { color: inherit; text-decoration: none; font-family: inherit; background: none; border: none; }
+
+img { display: block; max-width: 100%; }
+
+.bg-glow {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255,122,26,0.07), transparent 60%),
+    radial-gradient(ellipse 50% 35% at 15% 5%, rgba(59,130,246,0.05), transparent 55%);
+}
+.bg-grain {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.scroll-progress {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: var(--highlight); z-index: 200;
+  width: 0%; transition: width .08s linear;
+  box-shadow: 0 0 8px var(--highlight-soft);
+}
+
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.5rem 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  transition: background .4s var(--ease-quiet), border-color .4s var(--ease-quiet);
+  border-bottom: 1px solid transparent;
+}
+.nav.scrolled {
+  background: rgba(10,22,40,0.9);
+  backdrop-filter: blur(8px);
+  border-bottom-color: var(--line);
+}
+.nav-brand {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: 0.95rem; letter-spacing: 0.02em;
+}
+.nav-brand span { color: var(--highlight); }
+.nav-links { display: flex; gap: 2.5rem; }
+.nav-links a {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-soft); transition: color .3s var(--ease-quiet);
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--highlight);
+  transition: width .4s var(--ease-quiet);
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+.nav-status {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.1em; color: var(--text-soft);
+}
+.nav-status .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--highlight); box-shadow: 0 0 8px var(--highlight-soft);
+}
+@media (max-width: 900px) {
+  .nav-links, .nav-status { display: none; }
+}
+
+section { position: relative; z-index: 2; }
+
+.opener {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.opener-rule {
+  width: 56px; height: 2px; background: var(--highlight);
+  box-shadow: 0 0 12px var(--highlight-soft);
+}
+.opener-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 8rem 2rem 5rem;
+  position: relative; z-index: 2;
+}
+.hero-inner { max-width: 1400px; margin: 0 auto; width: 100%; }
+.hero-eyebrow {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;
+  letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--text-soft); margin-bottom: 2rem;
+  display: flex; align-items: center; gap: 1rem;
+  opacity: 0; transform: translateY(20px);
+}
+.hero-eyebrow .pulse {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--highlight); box-shadow: 0 0 10px var(--highlight-soft);
+}
+.hero-title {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: clamp(3rem, 10vw, 9rem); line-height: 0.88;
+  letter-spacing: -0.035em; margin-bottom: 2.5rem;
+  opacity: 0; transform: translateY(60px);
+}
+.hero-title .accent { color: var(--highlight); }
+.hero-sub {
+  max-width: 580px; font-size: 1.1rem; line-height: 1.6;
+  color: var(--text-soft); margin-bottom: 3rem;
+  opacity: 0; transform: translateY(30px);
+}
+.hero-cta {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  opacity: 0; transform: translateY(20px);
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  padding: 1rem 1.75rem; border: 1px solid var(--line-strong);
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  transition: border-color .4s var(--ease-quiet), color .4s var(--ease-quiet), background .4s var(--ease-quiet);
+  background: transparent;
+}
+.btn:hover { border-color: var(--highlight); color: var(--highlight); }
+.btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.btn-primary:hover { background: transparent; color: var(--highlight); border-color: var(--highlight); }
+.btn-arrow { font-size: 0.9rem; transition: transform .4s var(--ease-quiet); }
+.btn:hover .btn-arrow { transform: translateX(4px); }
+
+.hero-meta {
+  position: absolute; bottom: 2rem; right: 2rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.1em; color: var(--text-mute);
+  text-align: right; line-height: 1.8;
+}
+.hero-edge {
+  position: absolute; bottom: 2rem; left: 2rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.15em; color: var(--text-mute);
+  line-height: 1.8;
+}
+.hero-edge .v { color: var(--text); font-weight: 500; }
+
+@media (max-width: 768px) {
+  .hero { padding: 7rem 1.5rem 4rem; }
+  .hero-meta, .hero-edge { font-size: 0.6rem; }
+  .hero-edge { bottom: 1.5rem; left: 1.5rem; }
+  .hero-meta { bottom: 1.5rem; right: 1.5rem; }
+}
+
+.marquee {
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden; padding: 1.25rem 0;
+  position: relative; z-index: 2;
+  background: var(--bg);
+}
+.marquee-track {
+  display: flex; gap: 3rem;
+  animation: marquee 60s linear infinite;
+  white-space: nowrap; will-change: transform;
+}
+.marquee-item {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: 1.4rem; letter-spacing: -0.01em;
+  color: var(--text-mute);
+  display: flex; align-items: center; gap: 3rem;
+}
+.marquee-item .sep {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--highlight);
+}
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+.manifesto {
+  padding: 10rem 2rem 8rem;
+  max-width: 1400px; margin: 0 auto;
+}
+.manifesto-grid {
+  display: grid; grid-template-columns: 1fr 2fr;
+  gap: 5rem; align-items: start;
+}
+.manifesto-title {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: clamp(2rem, 4.2vw, 3.5rem); line-height: 0.95;
+  letter-spacing: -0.025em; margin-bottom: 2.5rem;
+}
+.manifesto-title .accent { color: var(--highlight); }
+.manifesto-body p {
+  font-size: 1.05rem; line-height: 1.75;
+  color: var(--text-soft); margin-bottom: 1.5rem;
+}
+.manifesto-body p strong { color: var(--text); font-weight: 500; }
+
+@media (max-width: 768px) {
+  .manifesto { padding: 6rem 1.5rem 5rem; }
+  .manifesto-grid { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+#cardstack { position: relative; z-index: 2; }
+.cardstack-intro {
+  padding: 8rem 2rem 4rem;
+  max-width: 1400px; margin: 0 auto;
+}
+.cardstack-intro h2 {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: clamp(2rem, 4.2vw, 3.5rem); line-height: 0.95;
+  letter-spacing: -0.025em; max-width: 800px; margin-top: 1.5rem;
+}
+.cardstack-intro h2 .accent { color: var(--highlight); }
+.cardstack-intro p {
+  font-size: 1rem; color: var(--text-soft);
+  max-width: 520px; margin-top: 1.5rem; line-height: 1.6;
+}
+#cardstack-pin {
+  height: 100vh; position: relative; overflow: hidden;
+}
+.cardstack__card {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: min(1100px, 92vw);
+  height: min(600px, 80vh);
+  background: var(--card);
+  border: 1px solid var(--line-strong);
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  overflow: hidden;
+  will-change: transform, opacity;
+  box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+}
+
+/* SVG illustration containers */
+.card-illustration {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--deep);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 24px 24px;
+  position: relative;
+  color: var(--highlight);
+}
+.card-illustration::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(13,29,53,0) 0%, rgba(13,29,53,0.4) 100%);
+  pointer-events: none;
+}
+.card-illustration svg {
+  width: 72%; height: 72%;
+  position: relative; z-index: 1;
+}
+
+.cardstack__card .card-img-label {
+  position: absolute; top: 1.5rem; left: 1.5rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text); z-index: 3;
+  padding: 0.4rem 0.7rem; border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(13,29,53,0.6); backdrop-filter: blur(6px);
+}
+.cardstack__card .card-content {
+  padding: 2.75rem 2.5rem; display: flex; flex-direction: column;
+  justify-content: space-between; gap: 2rem;
+}
+.cardstack__card .card-num {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.25em; color: var(--text-mute);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.cardstack__card .card-num .marker {
+  width: 24px; height: 2px; background: var(--highlight);
+  box-shadow: 0 0 8px var(--highlight-soft);
+}
+.cardstack__card .card-title {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: clamp(1.4rem, 2.4vw, 2.2rem); line-height: 0.98;
+  letter-spacing: -0.022em; margin-top: 1.5rem;
+}
+.cardstack__card .card-desc {
+  font-size: 0.92rem; line-height: 1.65; color: var(--text-soft);
+  margin-top: 1.25rem;
+}
+.cardstack__card .card-tags {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem;
+}
+.cardstack__card .card-tag {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 0.4rem 0.7rem; border: 1px solid var(--line-strong);
+  color: var(--text-soft);
+  transition: border-color .3s var(--ease-quiet), color .3s var(--ease-quiet);
+}
+.cardstack__card .card-tag:hover { border-color: var(--highlight); color: var(--text); }
+.cardstack__card .card-footer {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding-top: 1.5rem; border-top: 1px solid var(--line);
+}
+.cardstack__card .card-tag-line {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.15em; color: var(--text-mute);
+}
+.cardstack__card .card-arrow {
+  font-size: 1.4rem; color: var(--text-soft);
+  transition: color .3s var(--ease-quiet), transform .3s var(--ease-quiet);
+}
+.cardstack__card:hover .card-arrow { color: var(--highlight); transform: translateX(4px); }
+
+@media (max-width: 768px) {
+  .cardstack-intro { padding: 5rem 1.5rem 2rem; }
+  .cardstack__card {
+    grid-template-columns: 1fr;
+    height: 85vh; width: 92vw;
+  }
+  .card-illustration { height: 170px; }
+  .card-illustration svg { width: 50%; height: 90%; }
+  .cardstack__card .card-content { padding: 1.5rem; gap: 1rem; }
+  .cardstack__card .card-title { font-size: 1.4rem; margin-top: 0.75rem; }
+  .cardstack__card .card-desc { font-size: 0.85rem; margin-top: 0.75rem; }
+  .cardstack__card .card-tags { margin-top: 0.75rem; }
+}
+
+.gallery {
+  padding: 10rem 2rem;
+  max-width: 1400px; margin: 0 auto;
+}
+.gallery-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 4rem; gap: 2rem; flex-wrap: wrap;
+}
+.gallery-head h2 {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: clamp(2rem, 4.2vw, 3.5rem); line-height: 0.95;
+  letter-spacing: -0.025em; max-width: 700px;
+}
+.gallery-head h2 .accent { color: var(--highlight); }
+.gallery-head .meta {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-soft); max-width: 260px; text-align: right;
+  line-height: 1.7;
+}
+.gallery-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+}
+.gallery-item {
+  display: block; padding: 12px;
+  border: 1px solid var(--line);
+  transition: border-color .4s var(--ease-emphasis);
+  background: var(--deep);
+  position: relative;
+}
+.gallery-item:hover { border-color: var(--highlight); }
+.gallery-item::before,
+.gallery-item::after {
+  content: ''; position: absolute;
+  width: 16px; height: 16px;
+  opacity: 0; z-index: 3;
+  transition: opacity .35s var(--ease-quiet);
+}
+.gallery-item::before {
+  top: 4px; left: 4px;
+  border-top: 1px solid var(--highlight);
+  border-left: 1px solid var(--highlight);
+}
+.gallery-item::after {
+  bottom: 4px; right: 4px;
+  border-bottom: 1px solid var(--highlight);
+  border-right: 1px solid var(--highlight);
+}
+.gallery-item:hover::before,
+.gallery-item:hover::after { opacity: 1; }
+
+.gallery-illustration {
+  aspect-ratio: 4 / 5;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+  overflow: hidden;
+  color: var(--highlight);
+}
+.gallery-illustration svg {
+  width: 75%; height: 75%;
+  transition: transform .6s var(--ease-quiet);
+}
+.gallery-item:hover .gallery-illustration svg {
+  transform: scale(1.06);
+}
+.gallery-item .caption {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1rem 0.5rem 0.5rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-soft);
+}
+.gallery-item .caption .num { color: var(--text-mute); }
+
+@media (max-width: 768px) {
+  .gallery { padding: 6rem 1.5rem; }
+  .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .gallery-head .meta { text-align: left; }
+}
+
+.stats {
+  padding: 8rem 2rem;
+  max-width: 1400px; margin: 0 auto;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+}
+.stat { position: relative; padding-top: 2rem; }
+.stat::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 28px; height: 2px; background: var(--highlight);
+  box-shadow: 0 0 10px var(--highlight-soft);
+}
+.stat-num {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1;
+  letter-spacing: -0.035em; margin-bottom: 1rem;
+}
+.stat-num .unit {
+  font-size: 0.38em; color: var(--text-soft); margin-left: 0.25em;
+  letter-spacing: 0;
+}
+.stat-label {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-soft); line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .stats { padding: 5rem 1.5rem; }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+}
+
+.capabilities {
+  padding: 8rem 2rem;
+  max-width: 1400px; margin: 0 auto;
+}
+.capabilities-grid {
+  display: grid; grid-template-columns: 1fr 2fr;
+  gap: 5rem; align-items: start;
+}
+.capabilities-list {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.cap-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--line);
+  gap: 1rem;
+  transition: padding-left .3s var(--ease-quiet);
+}
+.cap-row:hover { padding-left: 0.5rem; }
+.cap-row:nth-child(odd) { padding-right: 1.5rem; }
+.cap-row .key {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-soft);
+}
+.cap-row .val {
+  font-family: 'Montserrat', sans-serif; font-weight: 800;
+  font-size: 1.05rem; letter-spacing: -0.01em;
+}
+
+@media (max-width: 768px) {
+  .capabilities { padding: 5rem 1.5rem; }
+  .capabilities-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .capabilities-list { grid-template-columns: 1fr; }
+  .cap-row:nth-child(odd) { padding-right: 0; }
+}
+
+.process {
+  padding: 10rem 2rem;
+  max-width: 1400px; margin: 0 auto;
+}
+.process-head { margin-bottom: 4rem; max-width: 700px; }
+.process-head h2 {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: clamp(2rem, 4.2vw, 3.5rem); line-height: 0.95;
+  letter-spacing: -0.025em; margin-top: 1.5rem;
+}
+.process-head h2 .accent { color: var(--highlight); }
+.process-head p {
+  font-size: 1rem; color: var(--text-soft);
+  margin-top: 1.5rem; line-height: 1.6;
+}
+.process-list {
+  display: flex; flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+.process-step {
+  display: grid; grid-template-columns: 80px 1fr 2fr 120px;
+  gap: 2rem; padding: 2.5rem 0;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  transition: background .4s var(--ease-quiet);
+  position: relative;
+}
+.process-step::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0; background: var(--highlight);
+  transition: width .4s var(--ease-quiet);
+}
+.process-step:hover { background: rgba(255,122,26,0.03); }
+.process-step:hover::before { width: 3px; }
+.process-step:hover .step-num { color: var(--highlight); }
+.step-num {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: 1.4rem; color: var(--text-mute);
+  transition: color .4s var(--ease-quiet);
+  padding-left: 1rem;
+}
+.step-name {
+  font-family: 'Montserrat', sans-serif; font-weight: 800;
+  font-size: 1.15rem; letter-spacing: -0.01em; line-height: 1.1;
+}
+.step-desc {
+  font-size: 0.92rem; line-height: 1.6; color: var(--text-soft);
+}
+.step-meta {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem;
+  letter-spacing: 0.12em; color: var(--text-mute);
+  text-align: right; line-height: 1.6;
+}
+
+@media (max-width: 900px) {
+  .process { padding: 6rem 1.5rem; }
+  .process-step { grid-template-columns: 50px 1fr; gap: 1rem; padding: 2rem 0; }
+  .step-num { padding-left: 0; font-size: 1.1rem; }
+  .step-name { font-size: 1rem; }
+  .step-desc, .step-meta { grid-column: 1 / -1; }
+  .step-meta { text-align: left; }
+}
+
+.quote {
+  padding: 8rem 2rem;
+  max-width: 1100px; margin: 0 auto;
+  text-align: center;
+}
+.quote-mark {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: 4.5rem; line-height: 1; color: var(--highlight);
+  margin-bottom: 1.5rem;
+}
+.quote-text {
+  font-family: 'Montserrat', sans-serif; font-weight: 800;
+  font-size: clamp(1.5rem, 3vw, 2.3rem); line-height: 1.25;
+  letter-spacing: -0.02em; margin-bottom: 2rem;
+}
+.quote-attr {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.contact {
+  padding: 12rem 2rem 8rem;
+  max-width: 1400px; margin: 0 auto;
+  text-align: center;
+}
+.contact h2 {
+  font-family: 'Montserrat', sans-serif; font-weight: 900;
+  font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 0.92;
+  letter-spacing: -0.035em; margin-top: 2rem; margin-bottom: 3rem;
+}
+.contact h2 .accent { color: var(--highlight); }
+.contact-cta {
+  display: inline-flex; align-items: center; gap: 0.75rem;
+  padding: 1.25rem 2rem; border: 1px solid var(--text);
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  transition: background .4s var(--ease-quiet), border-color .4s var(--ease-quiet), color .4s var(--ease-quiet);
+  background: transparent; color: var(--text);
+}
+.contact-cta:hover { background: var(--highlight); border-color: var(--highlight); color: #fff; }
+.contact-info {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 3rem; margin-top: 5rem; text-align: left;
+  padding-top: 4rem; border-top: 1px solid var(--line);
+}
+.contact-block .label-sm {
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-mute); margin-bottom: 1rem;
+}
+.contact-block .value {
+  font-size: 1rem; color: var(--text); line-height: 1.7;
+}
+.contact-block .value a {
+  border-bottom: 1px solid var(--line);
+  transition: border-color .3s var(--ease-quiet), color .3s var(--ease-quiet);
+}
+.contact-block .value a:hover { border-color: var(--highlight); color: var(--highlight); }
+
+@media (max-width: 768px) {
+  .contact { padding: 7rem 1.5rem 5rem; }
+  .contact-info { grid-template-columns: 1fr; gap: 2rem; padding-top: 3rem; }
+}
+
+.footer {
+  padding: 3rem 2rem 2rem;
+  border-top: 1px solid var(--line);
+  max-width: 1400px; margin: 0 auto;
+  position: relative; z-index: 2;
+}
+.footer-grid {
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 1rem;
+  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+  letter-spacing: 0.12em; color: var(--text-mute);
+}
+.footer-grid .brand { color: var(--text); font-weight: 500; }
+.footer-grid .brand span { color: var(--highlight); }
+
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity .9s var(--ease-quiet), transform .9s var(--ease-quiet);
+}
+.reveal.is-in { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: 0.12s; }
+.reveal-delay-2 { transition-delay: 0.24s; }
+.reveal-delay-3 { transition-delay: 0.36s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+  .hero-eyebrow, .hero-title, .hero-sub, .hero-cta {
+    opacity: 1 !important; transform: none !important;
+  }
+  .marquee-track { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<div class="bg-grain"></div>
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<nav class="nav" id="nav">
+  <div class="nav-brand">CSAN<span>.</span>INGENIERÍA</div>
+  <div class="nav-links">
+    <a href="#manifiesto">Manifiesto</a>
+    <a href="#servicios">Servicios</a>
+    <a href="#proyectos">Proyectos</a>
+    <a href="#proceso">Proceso</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+  <div class="nav-status">
+    <span class="dot"></span>
+    <span>OPERATIVO · 24/7</span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow" id="hero-eyebrow">
+      <span class="pulse"></span>
+      <span>INGENIERÍA ELÉCTRICA · DESDE 2010</span>
+    </div>
+    <h1 class="hero-title" id="hero-title">Energía que <span class="accent">no falla.</span></h1>
+    <p class="hero-sub" id="hero-sub">CSAN Ingeniería diseña, instala y mantiene sistemas eléctricos industriales y comerciales con la precisión de un ritual — cada conexión revisada, cada tablero trazado, cada retorno documentado.</p>
+    <div class="hero-cta" id="hero-cta">
+      <a href="#servicios" class="btn btn-primary">Ver servicios <span class="btn-arrow">→</span></a>
+      <a href="#contacto" class="btn">Solicitar diagnóstico</a>
+    </div>
+  </div>
+  <div class="hero-edge">
+    <div><span class="v">CSAN</span> / BUENOS AIRES · AR</div>
+    <div>ENRE · AEA · IRAM</div>
+  </div>
+  <div class="hero-meta">
+    FUNDADOR: CARLOS SANTA CRUZ<br>
+    12 TÉCNICOS · 3 INGENIEROS<br>
+    CABA + GRAN BUENOS AIRES
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <div class="marquee-item">Instalaciones Eléctricas <span class="sep"></span> Mantenimiento Industrial <span class="sep"></span> Tableros y Automatización <span class="sep"></span> Corriente Crítica <span class="sep"></span> Paneles Solares <span class="sep"></span> Domótica <span class="sep"></span> Pruebas Eléctricas <span class="sep"></span> Cañerías <span class="sep"></span></div>
+    <div class="marquee-item">Instalaciones Eléctricas <span class="sep"></span> Mantenimiento Industrial <span class="sep"></span> Tableros y Automatización <span class="sep"></span> Corriente Crítica <span class="sep"></span> Paneles Solares <span class="sep"></span> Domótica <span class="sep"></span> Pruebas Eléctricas <span class="sep"></span> Cañerías <span class="sep"></span></div>
+  </div>
+</div>
+
+<section class="manifesto" id="manifiesto">
+  <div class="manifesto-grid">
+    <div>
+      <div class="opener reveal">
+        <span class="opener-rule"></span>
+        <span class="opener-label">/ 01 — Manifiesto</span>
+      </div>
+    </div>
+    <div>
+      <h2 class="manifesto-title reveal">Tratamos la electricidad como <span class="accent">oficio</span>, no como trámite.</h2>
+      <div class="manifesto-body">
+        <p class="reveal reveal-delay-1">Una instalación eléctrica mal ejecutada no siempre falla hoy. A veces espera meses, incluso años, hasta que el sistema se ve exigido. <strong>Por eso documentamos cada conexión, cada medida, cada corrección.</strong> Lo que otros llaman "mantenimiento", para nosotros es la memoria del sistema.</p>
+        <p class="reveal reveal-delay-2">Trabajamos con clientes que no toleran el corte — hospitales, industrias, plantas de proceso, data centers, edificios institucionales. Donde la energía se detiene, el costo se mide en horas-hombre, en producto perdido, en reputación.</p>
+        <p class="reveal reveal-delay-3">Nuestra metodología combina ingeniería de detalle, ejecución con técnicos propios y protocolos de prueba que dejan registro. No improvisamos. No subcontratamos lo crítico. Cada proyecto entra al taller y sale con carpeta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cardstack">
+  <div class="cardstack-intro" id="servicios">
+    <div class="opener reveal">
+      <span class="opener-rule"></span>
+      <span class="opener-label">/ 02 — Servicios</span>
+    </div>
+    <h2 class="reveal reveal-delay-1">Nueve disciplinas bajo un <span class="accent">mismo estándar</span>.</h2>
+    <p class="reveal reveal-delay-2">Cada línea de servicio tiene su propio protocolo, su propio equipo responsable y su propia carpeta de entrega. Lo que no se documenta, no se hizo.</p>
+  </div>
+  <div id="cardstack-pin">
+
+    <!-- CARD 01: Mantenimiento eléctrico -->
+    <div class="cardstack__card">
+      <div class="card-illustration">
+        <div class="card-img-label">SERVICIO 01</div>
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M225 55 L160 200 L200 200 L135 345 L245 165 L200 165 L270 55 Z" fill="currentColor" fill-opacity="0.1"/>
+          <line x1="55" y1="140" x2="55" y2="345" opacity="0.4"/>
+          <line x1="35" y1="170" x2="75" y2="170" opacity="0.4"/>
+          <line x1="40" y1="190" x2="70" y2="190" opacity="0.4"/>
+          <line x1="345" y1="140" x2="345" y2="345" opacity="0.4"/>
+          <line x1="325" y1="170" x2="365" y2="170" opacity="0.4"/>
+          <line x1="330" y1="190" x2="360" y2="190" opacity="0.4"/>
+          <path d="M75 170 Q200 185 325 170" opacity="0.35" stroke-width="1"/>
+          <path d="M70 190 Q200 205 330 190" opacity="0.35" stroke-width="1"/>
+          <line x1="0" y1="350" x2="400" y2="350" stroke-width="2" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-num"><span>01 / 09</span><span class="marker"></span></div>
+          <h3 class="card-title">Instalaciones y mantenimiento eléctrico</h3>
+          <p class="card-desc">Servicio integral para instalaciones existentes y nuevas. Diagnóstico de sitio, ejecución y seguimiento documentado bajo norma AEA. Cobertura continua con contratos de servicio.</p>
+          <div class="card-tags">
+            <span class="card-tag">Norma AEA</span><span class="card-tag">ENRE</span><span class="card-tag">IRAM</span><span class="card-tag">24/7</span>
+          </div>
+        </div>
+        <div class="card-footer"><span class="card-tag-line">Servicio continuo</span><span class="card-arrow">→</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 02: Industrial y comercial -->
+    <div class="cardstack__card">
+      <div class="card-illustration">
+        <div class="card-img-label">SERVICIO 02</div>
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 305 L40 195 L88 195 L88 155 L136 195 L136 155 L184 195 L184 155 L232 195 L232 155 L280 195 L280 155 L328 195 L328 305 Z" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="68" y="95" width="16" height="60" fill="currentColor" fill-opacity="0.08"/>
+          <rect x="96" y="75" width="16" height="80" fill="currentColor" fill-opacity="0.08"/>
+          <circle cx="76" cy="85" r="8" opacity="0.25" fill="currentColor"/>
+          <circle cx="88" cy="65" r="6" opacity="0.18" fill="currentColor"/>
+          <circle cx="104" cy="62" r="10" opacity="0.22" fill="currentColor"/>
+          <circle cx="118" cy="48" r="7" opacity="0.15" fill="currentColor"/>
+          <rect x="52" y="225" width="18" height="18" opacity="0.5"/>
+          <rect x="80" y="225" width="18" height="18" opacity="0.5"/>
+          <rect x="148" y="225" width="18" height="18" opacity="0.5"/>
+          <rect x="196" y="225" width="18" height="18" opacity="0.5"/>
+          <rect x="244" y="225" width="18" height="18" opacity="0.5"/>
+          <rect x="292" y="225" width="18" height="18" opacity="0.5"/>
+          <rect x="176" y="255" width="40" height="50" opacity="0.5"/>
+          <line x1="0" y1="310" x2="400" y2="310" stroke-width="2" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-num"><span>02 / 09</span><span class="marker"></span></div>
+          <h3 class="card-title">Instalación eléctrica industrial y comercial</h3>
+          <p class="card-desc">Proyectos llave en mano para plantas, galpones, edificios corporativos y retail. Cálculo de carga, canalizaciones, tableros generales y seccionales, puesta en servicio y certificación.</p>
+          <div class="card-tags">
+            <span class="card-tag">Baja tensión</span><span class="card-tag">Media tensión</span><span class="card-tag">Llave en mano</span>
+          </div>
+        </div>
+        <div class="card-footer"><span class="card-tag-line">Proyectos turnkey</span><span class="card-arrow">→</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 03: Tableros y automatización -->
+    <div class="cardstack__card">
+      <div class="card-illustration">
+        <div class="card-img-label">SERVICIO 03</div>
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="88" y="55" width="224" height="290" fill="currentColor" fill-opacity="0.03"/>
+          <rect x="108" y="75" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="152" y="75" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="196" y="75" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="240" y="75" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="108" y="103" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="152" y="103" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="196" y="103" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="240" y="103" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="108" y="131" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="152" y="131" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="196" y="131" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="240" y="131" width="38" height="22" fill="currentColor" fill-opacity="0.06"/>
+          <line x1="127" y1="80" x2="127" y2="92" stroke-width="2"/>
+          <line x1="171" y1="80" x2="171" y2="92" stroke-width="2"/>
+          <line x1="215" y1="80" x2="215" y2="92" stroke-width="2"/>
+          <line x1="259" y1="80" x2="259" y2="92" stroke-width="2"/>
+          <line x1="127" y1="108" x2="127" y2="120" stroke-width="2"/>
+          <line x1="171" y1="108" x2="171" y2="120" stroke-width="2"/>
+          <line x1="215" y1="108" x2="215" y2="120" stroke-width="2"/>
+          <line x1="259" y1="108" x2="259" y2="120" stroke-width="2"/>
+          <line x1="127" y1="136" x2="127" y2="148" stroke-width="2"/>
+          <line x1="171" y1="136" x2="171" y2="148" stroke-width="2"/>
+          <line x1="215" y1="136" x2="215" y2="148" stroke-width="2"/>
+          <line x1="259" y1="136" x2="259" y2="148" stroke-width="2"/>
+          <rect x="108" y="185" width="172" height="48" fill="currentColor" fill-opacity="0.1"/>
+          <circle cx="130" cy="209" r="9"/>
+          <circle cx="170" cy="209" r="9"/>
+          <circle cx="210" cy="209" r="9"/>
+          <circle cx="250" cy="209" r="9"/>
+          <rect x="128" y="250" width="132" height="38" fill="currentColor" fill-opacity="0.08"/>
+          <line x1="142" y1="269" x2="246" y2="269" stroke-width="1" opacity="0.5"/>
+          <rect x="108" y="300" width="172" height="30" fill="currentColor" fill-opacity="0.05"/>
+          <circle cx="125" cy="315" r="4" fill="currentColor" fill-opacity="0.5"/>
+          <circle cx="140" cy="315" r="4"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-num"><span>03 / 09</span><span class="marker"></span></div>
+          <h3 class="card-title">Tableros y automatización</h3>
+          <p class="card-desc">Diseño y fabricación de tableros de control, comando y fuerza. Integración con PLC, HMI y SCADA. Automatización de procesos productivos y supervisión remota de variables eléctricas.</p>
+          <div class="card-tags">
+            <span class="card-tag">PLC</span><span class="card-tag">SCADA</span><span class="card-tag">HMI</span><span class="card-tag">Modbus TCP</span>
+          </div>
+        </div>
+        <div class="card-footer"><span class="card-tag-line">Taller propio</span><span class="card-arrow">→</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 04: Preventivo y correctivo -->
+    <div class="cardstack__card">
+      <div class="card-illustration">
+        <div class="card-img-label">SERVICIO 04</div>
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="155" cy="200" r="72" fill="currentColor" fill-opacity="0.05"/>
+          <circle cx="155" cy="200" r="48"/>
+          <circle cx="155" cy="200" r="18"/>
+          <rect x="150" y="116" width="10" height="18" fill="currentColor" fill-opacity="0.1"/>
+          <rect x="150" y="266" width="10" height="18" fill="currentColor" fill-opacity="0.1"/>
+          <rect x="111" y="195" width="18" height="10" fill="currentColor" fill-opacity="0.1"/>
+          <rect x="181" y="195" width="18" height="10" fill="currentColor" fill-opacity="0.1"/>
+          <rect x="124" y="129" width="10" height="18" transform="rotate(-45 129 138)" fill="currentColor" fill-opacity="0.1"/>
+          <rect x="176" y="129" width="10" height="18" transform="rotate(45 181 138)" fill="currentColor" fill-opacity="0.1"/>
+          <rect x="124" y="253" width="10" height="18" transform="rotate(45 129 262)" fill="currentColor" fill-opacity="0.1"/>
+          <rect x="176" y="253" width="10" height="18" transform="rotate(-45 181 262)" fill="currentColor" fill-opacity="0.1"/>
+          <g transform="rotate(45 285 200)">
+            <rect x="277" y="125" width="16" height="125" fill="currentColor" fill-opacity="0.1"/>
+            <path d="M267 105 L267 135 L287 135 L287 125 L303 125 L303 105 L287 105 L287 95 L267 95 Z" fill="currentColor" fill-opacity="0.12"/>
+            <circle cx="285" cy="115" r="6"/>
+            <path d="M273 250 L273 270 L297 270 L297 250 Z" fill="currentColor" fill-opacity="0.08"/>
+          </g>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-num"><span>04 / 09</span><span class="marker"></span></div>
+          <h3 class="card-title">Mantenimiento preventivo y correctivo</h3>
+          <p class="card-desc">Programas calendarizados de inspección, termografía, aprietes, limpieza y reemplazo de componentes. Atención de fallas con respuesta menor a 4 horas en clientes con contrato.</p>
+          <div class="card-tags">
+            <span class="card-tag">Termografía</span><span class="card-tag">Plan calendarizado</span><span class="card-tag">SLA 4h</span>
+          </div>
+        </div>
+        <div class="card-footer"><span class="card-tag-line">Contratos anuales</span><span class="card-arrow">→</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 05: Corriente crítica -->
+    <div class="cardstack__card">
+      <div class="card-illustration">
+        <div class="card-img-label">SERVICIO 05</div>
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="95" y="90" width="210" height="220" fill="currentColor" fill-opacity="0.03"/>
+          <rect x="120" y="115" width="160" height="55" fill="currentColor" fill-opacity="0.1"/>
+          <path d="M130 142 Q150 122 170 142 T210 142 T250 142 T280 142" stroke-width="2"/>
+          <rect x="120" y="185" width="65" height="32" fill="currentColor" fill-opacity="0.05"/>
+          <rect x="187" y="192" width="6" height="18" fill="currentColor" fill-opacity="0.1"/>
+          <rect x="128" y="193" width="10" height="16" fill="currentColor" fill-opacity="0.5"/>
+          <rect x="142" y="193" width="10" height="16" fill="currentColor" fill-opacity="0.5"/>
+          <rect x="156" y="193" width="10" height="16" fill="currentColor" fill-opacity="0.5"/>
+          <rect x="170" y="193" width="10" height="16" fill="currentColor" fill-opacity="0.2"/>
+          <circle cx="215" cy="201" r="5" fill="currentColor" fill-opacity="0.7"/>
+          <circle cx="235" cy="201" r="5"/>
+          <circle cx="255" cy="201" r="5"/>
+          <rect x="120" y="235" width="160" height="38" fill="currentColor" fill-opacity="0.05"/>
+          <circle cx="145" cy="254" r="9"/>
+          <line x1="141" y1="250" x2="149" y2="258" stroke-width="1"/>
+          <line x1="141" y1="258" x2="149" y2="250" stroke-width="1"/>
+          <circle cx="185" cy="254" r="9"/>
+          <line x1="181" y1="254" x2="189" y2="254" stroke-width="1"/>
+          <circle cx="225" cy="254" r="9"/>
+          <line x1="221" y1="254" x2="229" y2="254" stroke-width="1"/>
+          <circle cx="265" cy="254" r="9"/>
+          <line x1="261" y1="254" x2="269" y2="254" stroke-width="1"/>
+          <rect x="135" y="285" width="130" height="14" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="145" y1="292" x2="255" y2="292" stroke-width="1" opacity="0.4"/>
+          <path d="M305 200 Q345 200 345 240 L345 300" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-num"><span>05 / 09</span><span class="marker"></span></div>
+          <h3 class="card-title">Sistema de respaldo y corriente crítica</h3>
+          <p class="card-desc">Diseño e instalación de UPS, grupos electrógenos, sistemas DC para telecomunicaciones y salas críticas. Conmutación transparente, autonomía calculada y pruebas de carga reales.</p>
+          <div class="card-tags">
+            <span class="card-tag">UPS</span><span class="card-tag">Grupos electrógenos</span><span class="card-tag">DC Power</span><span class="card-tag">Tier III</span>
+          </div>
+        </div>
+        <div class="card-footer"><span class="card-tag-line">Misión crítica</span><span class="card-arrow">→</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 06: Paneles solares -->
+    <div class="cardstack__card">
+      <div class="card-illustration">
+        <div class="card-img-label">SERVICIO 06</div>
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="320" cy="75" r="22" fill="currentColor" fill-opacity="0.15"/>
+          <line x1="320" y1="35" x2="320" y2="48" stroke-width="2"/>
+          <line x1="320" y1="102" x2="320" y2="115" stroke-width="2"/>
+          <line x1="280" y1="75" x2="293" y2="75" stroke-width="2"/>
+          <line x1="347" y1="75" x2="360" y2="75" stroke-width="2"/>
+          <line x1="292" y1="47" x2="301" y2="56" stroke-width="2"/>
+          <line x1="339" y1="94" x2="348" y2="103" stroke-width="2"/>
+          <line x1="292" y1="103" x2="301" y2="94" stroke-width="2"/>
+          <line x1="339" y1="56" x2="348" y2="47" stroke-width="2"/>
+          <path d="M55 195 L295 175 L340 240 L95 260 Z" fill="currentColor" fill-opacity="0.08"/>
+          <path d="M120 190 L140 255" opacity="0.5"/>
+          <path d="M185 185 L205 250" opacity="0.5"/>
+          <path d="M250 180 L270 245" opacity="0.5"/>
+          <path d="M70 215 L325 195" opacity="0.5"/>
+          <path d="M82 238 L335 218" opacity="0.5"/>
+          <line x1="95" y1="260" x2="95" y2="320" opacity="0.5"/>
+          <line x1="295" y1="240" x2="295" y2="320" opacity="0.5"/>
+          <line x1="75" y1="320" x2="320" y2="320" opacity="0.4" stroke-width="2"/>
+          <rect x="155" y="290" width="65" height="35" fill="currentColor" fill-opacity="0.05"/>
+          <circle cx="170" cy="307" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <line x1="185" y1="307" x2="210" y2="307" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-num"><span>06 / 09</span><span class="marker"></span></div>
+          <h3 class="card-title">Instalación de paneles solares</h3>
+          <p class="card-desc">Sistemas fotovoltaicos on-grid y off-grid para industrias, comercios y viviendas. Diseño con estudio de sombreado, montaje estructural certificado y tramitación ante distribuidora.</p>
+          <div class="card-tags">
+            <span class="card-tag">FV On-grid</span><span class="card-tag">Off-grid</span><span class="card-tag">Netmetering</span><span class="card-tag">Estructura cert.</span>
+          </div>
+        </div>
+        <div class="card-footer"><span class="card-tag-line">Energía distribuida</span><span class="card-arrow">→</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 07: Domótica -->
+    <div class="cardstack__card">
+      <div class="card-illustration">
+        <div class="card-img-label">SERVICIO 07</div>
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M95 205 L200 115 L305 205 L305 325 L95 325 Z" fill="currentColor" fill-opacity="0.05"/>
+          <path d="M75 205 L200 105 L325 205"/>
+          <rect x="175" y="250" width="45" height="75" fill="currentColor" fill-opacity="0.08"/>
+          <circle cx="212" cy="288" r="2.5" fill="currentColor" fill-opacity="0.6"/>
+          <rect x="115" y="225" width="42" height="38" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="136" y1="225" x2="136" y2="263" opacity="0.4"/>
+          <line x1="115" y1="244" x2="157" y2="244" opacity="0.4"/>
+          <rect x="243" y="225" width="42" height="38" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="264" y1="225" x2="264" y2="263" opacity="0.4"/>
+          <line x1="243" y1="244" x2="285" y2="244" opacity="0.4"/>
+          <path d="M248 108 Q248 78 278 78" opacity="0.5" stroke-width="2"/>
+          <path d="M248 108 Q248 58 288 58" opacity="0.4" stroke-width="2"/>
+          <path d="M248 108 Q248 38 298 38" opacity="0.3" stroke-width="2"/>
+          <circle cx="248" cy="108" r="4" fill="currentColor" fill-opacity="0.6"/>
+          <line x1="55" y1="330" x2="345" y2="330" stroke-width="2" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-num"><span>07 / 09</span><span class="marker"></span></div>
+          <h3 class="card-title">Domótica e inmótica</h3>
+          <p class="card-desc">Automatización de viviendas y edificios. Control de iluminación, clima, accesos y seguridad sobre protocolos KNX y Modbus. Integración con plataformas de gestión inmobiliaria.</p>
+          <div class="card-tags">
+            <span class="card-tag">KNX</span><span class="card-tag">Modbus</span><span class="card-tag">BMS</span><span class="card-tag">App móvil</span>
+          </div>
+        </div>
+        <div class="card-footer"><span class="card-tag-line">Edificios inteligentes</span><span class="card-arrow">→</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 08: Pruebas eléctricas -->
+    <div class="cardstack__card">
+      <div class="card-illustration">
+        <div class="card-img-label">SERVICIO 08</div>
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="115" y="75" width="170" height="250" rx="10" fill="currentColor" fill-opacity="0.03"/>
+          <rect x="135" y="95" width="130" height="60" fill="currentColor" fill-opacity="0.1"/>
+          <path d="M145 125 Q165 105 185 125 T225 125 T255 125" stroke-width="2"/>
+          <circle cx="200" cy="215" r="48" fill="currentColor" fill-opacity="0.05"/>
+          <circle cx="200" cy="215" r="36"/>
+          <line x1="200" y1="173" x2="200" y2="183" stroke-width="2"/>
+          <line x1="242" y1="215" x2="232" y2="215" stroke-width="2"/>
+          <line x1="200" y1="257" x2="200" y2="247" stroke-width="2"/>
+          <line x1="158" y1="215" x2="168" y2="215" stroke-width="2"/>
+          <line x1="200" y1="215" x2="228" y2="188" stroke-width="3"/>
+          <circle cx="200" cy="215" r="4" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="155" cy="285" r="9" fill="currentColor" fill-opacity="0.08"/>
+          <circle cx="200" cy="285" r="9" fill="currentColor" fill-opacity="0.08"/>
+          <circle cx="245" cy="285" r="9" fill="currentColor" fill-opacity="0.08"/>
+          <line x1="95" y1="195" x2="35" y2="195" opacity="0.5" stroke-width="2"/>
+          <line x1="95" y1="235" x2="35" y2="275" opacity="0.5" stroke-width="2"/>
+          <circle cx="30" cy="195" r="6" fill="currentColor" fill-opacity="0.3)"/>
+          <circle cx="30" cy="280" r="6" fill="currentColor" fill-opacity="0.3)"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-num"><span>08 / 09</span><span class="marker"></span></div>
+          <h3 class="card-title">Pruebas eléctricas</h3>
+          <p class="card-desc">Ensayos de rigidez dieléctrica, resistencia de aislación, resistencia de puesta a tierra, continuidad de conductores de protección y termografía infrarroja. Informe técnico firmado.</p>
+          <div class="card-tags">
+            <span class="card-tag">Rigidez dieléctrica</span><span class="card-tag">Aislación</span><span class="card-tag">PAT</span><span class="card-tag">Termografía IR</span>
+          </div>
+        </div>
+        <div class="card-footer"><span class="card-tag-line">Informes firmados</span><span class="card-arrow">→</span></div>
+      </div>
+    </div>
+
+    <!-- CARD 09: Cañerías eléctricas -->
+    <div class="cardstack__card">
+      <div class="card-illustration">
+        <div class="card-img-label">SERVICIO 09</div>
+        <svg viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="135" y="70" width="130" height="85" fill="currentColor" fill-opacity="0.05"/>
+          <circle cx="165" cy="112" r="9" fill="currentColor" fill-opacity="0.1)"/>
+          <circle cx="200" cy="112" r="9" fill="currentColor" fill-opacity="0.1)"/>
+          <circle cx="235" cy="112" r="9" fill="currentColor" fill-opacity="0.1)"/>
+          <line x1="165" y1="103" x2="165" y2="121" opacity="0.4"/>
+          <line x1="200" y1="103" x2="200" y2="121" opacity="0.4"/>
+          <line x1="235" y1="103" x2="235" y2="121" opacity="0.4"/>
+          <path d="M155 155 L155 220 Q155 260 115 260 L75 260 Q55 260 55 280 L55 350" fill="currentColor" fill-opacity="0.03"/>
+          <path d="M200 155 L200 350" fill="currentColor" fill-opacity="0.03"/>
+          <path d="M245 155 L245 200 Q245 240 285 240 L325 240 Q345 240 345 260 L345 350" fill="currentColor" fill-opacity="0.03"/>
+          <line x1="150" y1="200" x2="160" y2="200" opacity="0.4"/>
+          <line x1="195" y1="220" x2="205" y2="220" opacity="0.4"/>
+          <line x1="195" y1="280" x2="205" y2="280" opacity="0.4"/>
+          <line x1="340" y1="280" x2="350" y2="280" opacity="0.4"/>
+          <line x1="50" y1="220" x2="60" y2="220" opacity="0.4"/>
+          <line x1="0" y1="355" x2="400" y2="355" stroke-width="2" opacity="0.4"/>
+          <line x1="135" y1="70" x2="115" y2="50" opacity="0.3"/>
+          <line x1="265" y1="70" x2="285" y2="50" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="card-content">
+        <div>
+          <div class="card-num"><span>09 / 09</span><span class="marker"></span></div>
+          <h3 class="card-title">Cañerías eléctricas</h3>
+          <p class="card-desc">Tendido de canalizaciones en PVC, metálicas y conduit flexible. Curvado, soportería y empaque según norma. Trabajo coordinado con obras civiles para minimizar retrabajos.</p>
+          <div class="card-tags">
+            <span class="card-tag">PVC</span><span class="card-tag">Conduit metálico</span><span class="card-tag">Flexible</span><span class="card-tag">Soportería norma</span>
+          </div>
+        </div>
+        <div class="card-footer"><span class="card-tag-line">Canalización completa</span><span class="card-arrow">→</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="proyectos">
+  <div class="opener reveal">
+    <span class="opener-rule"></span>
+    <span class="opener-label">/ 03 — Proyectos</span>
+  </div>
+  <div class="gallery-head">
+    <h2 class="reveal reveal-delay-1">Trabajo <span class="accent">documentado</span>, no portfolio decorativo.</h2>
+    <div class="meta reveal reveal-delay-2">SELECCIÓN 2022—2024<br>Diagramas técnicos de referencia</div>
+  </div>
+  <div class="gallery-grid">
+
+    <a href="#" class="gallery-item reveal">
+      <div class="gallery-illustration">
+        <svg viewBox="0 0 300 375" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="80" y="170" width="140" height="110" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="80" y1="190" x2="65" y2="190" opacity="0.4"/>
+          <line x1="80" y1="210" x2="65" y2="210" opacity="0.4"/>
+          <line x1="80" y1="230" x2="65" y2="230" opacity="0.4"/>
+          <line x1="80" y1="250" x2="65" y2="250" opacity="0.4"/>
+          <line x1="220" y1="190" x2="235" y2="190" opacity="0.4"/>
+          <line x1="220" y1="210" x2="235" y2="210" opacity="0.4"/>
+          <line x1="220" y1="230" x2="235" y2="230" opacity="0.4"/>
+          <line x1="220" y1="250" x2="235" y2="250" opacity="0.4"/>
+          <rect x="100" y="135" width="12" height="35" fill="currentColor" fill-opacity="0.08"/>
+          <rect x="144" y="135" width="12" height="35" fill="currentColor" fill-opacity="0.08"/>
+          <rect x="188" y="135" width="12" height="35" fill="currentColor" fill-opacity="0.08"/>
+          <line x1="106" y1="135" x2="106" y2="55" opacity="0.4"/>
+          <line x1="150" y1="135" x2="150" y2="55" opacity="0.4"/>
+          <line x1="194" y1="135" x2="194" y2="55" opacity="0.4"/>
+          <line x1="65" y1="55" x2="235" y2="55" opacity="0.4"/>
+          <line x1="150" y1="55" x2="150" y2="25" opacity="0.3"/>
+          <line x1="20" y1="305" x2="280" y2="305" stroke-width="2" opacity="0.3"/>
+          <line x1="20" y1="290" x2="280" y2="290" opacity="0.2"/>
+          <line x1="50" y1="290" x2="50" y2="305" opacity="0.2"/>
+          <line x1="90" y1="290" x2="90" y2="305" opacity="0.2"/>
+          <line x1="130" y1="290" x2="130" y2="305" opacity="0.2"/>
+          <line x1="170" y1="290" x2="170" y2="305" opacity="0.2"/>
+          <line x1="210" y1="290" x2="210" y2="305" opacity="0.2"/>
+          <line x1="250" y1="290" x2="250" y2="305" opacity="0.2"/>
+          <line x1="0" y1="325" x2="300" y2="325" stroke-width="2" opacity="0.4"/>
+          <polygon points="245,100 270,100 257.5,78" fill="currentColor" fill-opacity="0.12"/>
+          <line x1="257" y1="88" x2="257" y2="95" stroke-width="2"/>
+        </svg>
+      </div>
+      <div class="caption"><span>SUBESTACIÓN PLANTA NORTE</span><span class="num">001 / 24</span></div>
+    </a>
+
+    <a href="#" class="gallery-item reveal reveal-delay-1">
+      <div class="gallery-illustration">
+        <svg viewBox="0 0 300 375" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="60" y="60" width="180" height="260" fill="currentColor" fill-opacity="0.03"/>
+          <rect x="80" y="80" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="115" y="80" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="150" y="80" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="185" y="80" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="80" y="103" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="115" y="103" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="150" y="103" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="185" y="103" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="80" y="126" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="115" y="126" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="150" y="126" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="185" y="126" width="30" height="18" fill="currentColor" fill-opacity="0.06"/>
+          <line x1="95" y1="84" x2="95" y2="94" stroke-width="2"/>
+          <line x1="130" y1="84" x2="130" y2="94" stroke-width="2"/>
+          <line x1="165" y1="84" x2="165" y2="94" stroke-width="2"/>
+          <line x1="200" y1="84" x2="200" y2="94" stroke-width="2"/>
+          <rect x="80" y="170" width="135" height="40" fill="currentColor" fill-opacity="0.1"/>
+          <circle cx="100" cy="190" r="8"/>
+          <circle cx="135" cy="190" r="8"/>
+          <circle cx="170" cy="190" r="8"/>
+          <circle cx="200" cy="190" r="8"/>
+          <rect x="95" y="230" width="110" height="30" fill="currentColor" fill-opacity="0.08"/>
+          <line x1="105" y1="245" x2="195" y2="245" stroke-width="1" opacity="0.4"/>
+          <rect x="95" y="275" width="110" height="30" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="80" y1="80" x2="80" y2="60" opacity="0.3"/>
+          <line x1="220" y1="80" x2="220" y2="60" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="caption"><span>TABLERO SECCIONAL INDUSTRIA</span><span class="num">002 / 23</span></div>
+    </a>
+
+    <a href="#" class="gallery-item reveal reveal-delay-2">
+      <div class="gallery-illustration">
+        <svg viewBox="0 0 300 375" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="50" y="50" width="200" height="280" fill="currentColor" fill-opacity="0.02"/>
+          <line x1="50" y1="110" x2="250" y2="110" opacity="0.3"/>
+          <line x1="50" y1="170" x2="250" y2="170" opacity="0.3"/>
+          <line x1="50" y1="230" x2="250" y2="230" opacity="0.3"/>
+          <line x1="50" y1="290" x2="250" y2="290" opacity="0.3"/>
+          <rect x="65" y="60" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="93" y="60" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="121" y="60" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="149" y="60" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="177" y="60" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="205" y="60" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="65" y="120" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="93" y="120" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="121" y="120" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="149" y="120" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="177" y="120" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="205" y="120" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="65" y="180" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="93" y="180" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="121" y="180" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="149" y="180" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="177" y="180" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="205" y="180" width="22" height="42" fill="currentColor" fill-opacity="0.06"/>
+          <circle cx="76" cy="81" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="104" cy="81" r="3" fill="currentColor" fill-opacity="0.6)"/>
+          <circle cx="132" cy="81" r="3"/>
+          <circle cx="160" cy="81" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="188" cy="81" r="3"/>
+          <circle cx="216" cy="81" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="76" cy="141" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="104" cy="141" r="3"/>
+          <circle cx="132" cy="141" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="160" cy="141" r="3"/>
+          <circle cx="188" cy="141" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="216" cy="141" r="3"/>
+          <circle cx="76" cy="201" r="3"/>
+          <circle cx="104" cy="201" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="132" cy="201" r="3"/>
+          <circle cx="160" cy="201" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="188" cy="201" r="3"/>
+          <circle cx="216" cy="201" r="3" fill="currentColor" fill-opacity="0.6"/>
+          <line x1="30" y1="335" x2="270" y2="335" stroke-width="2" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="caption"><span>DATACENTER BT-A</span><span class="num">003 / 24</span></div>
+    </a>
+
+    <a href="#" class="gallery-item reveal">
+      <div class="gallery-illustration">
+        <svg viewBox="0 0 300 375" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="245" cy="55" r="18" fill="currentColor" fill-opacity="0.15"/>
+          <line x1="245" y1="25" x2="245" y2="35" stroke-width="2"/>
+          <line x1="245" y1="75" x2="245" y2="85" stroke-width="2"/>
+          <line x1="215" y1="55" x2="225" y2="55" stroke-width="2"/>
+          <line x1="265" y1="55" x2="275" y2="55" stroke-width="2"/>
+          <path d="M40 165 L230 150 L260 195 L65 210 Z" fill="currentColor" fill-opacity="0.08"/>
+          <path d="M85 160 L100 210" opacity="0.4"/>
+          <path d="M130 155 L145 205" opacity="0.4"/>
+          <path d="M175 150 L190 200" opacity="0.4"/>
+          <path d="M50 175 L255 160" opacity="0.4"/>
+          <path d="M58 190 L260 175" opacity="0.4"/>
+          <rect x="40" y="210" width="230" height="100" fill="currentColor" fill-opacity="0.02"/>
+          <rect x="70" y="225" width="40" height="25" opacity="0.3"/>
+          <rect x="130" y="225" width="40" height="25" opacity="0.3"/>
+          <rect x="190" y="225" width="40" height="25" opacity="0.3"/>
+          <rect x="120" y="270" width="50" height="40" opacity="0.3"/>
+          <line x1="65" y1="210" x2="65" y2="310" opacity="0.3"/>
+          <line x1="245" y1="210" x2="245" y2="310" opacity="0.3"/>
+          <line x1="0" y1="315" x2="300" y2="315" stroke-width="2" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="caption"><span>SOLAR ROOFTOP 400KWP</span><span class="num">004 / 23</span></div>
+    </a>
+
+    <a href="#" class="gallery-item reveal reveal-delay-1">
+      <div class="gallery-illustration">
+        <svg viewBox="0 0 300 375" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="60" y="120" width="180" height="200" fill="currentColor" fill-opacity="0.03"/>
+          <path d="M50 120 L150 60 L250 120"/>
+          <rect x="120" y="200" width="60" height="120" fill="currentColor" fill-opacity="0.06"/>
+          <line x1="150" y1="200" x2="150" y2="320" opacity="0.3"/>
+          <rect x="75" y="140" width="35" height="30" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="92" y1="140" x2="92" y2="170" opacity="0.3"/>
+          <line x1="75" y1="155" x2="110" y2="155" opacity="0.3"/>
+          <rect x="190" y="140" width="35" height="30" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="207" y1="140" x2="207" y2="170" opacity="0.3"/>
+          <line x1="190" y1="155" x2="225" y2="155" opacity="0.3"/>
+          <rect x="75" y="180" width="35" height="30" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="92" y1="180" x2="92" y2="210" opacity="0.3"/>
+          <line x1="75" y1="195" x2="110" y2="195" opacity="0.3"/>
+          <rect x="190" y="180" width="35" height="30" fill="currentColor" fill-opacity="0.05"/>
+          <line x1="207" y1="180" x2="207" y2="210" opacity="0.3"/>
+          <line x1="190" y1="195" x2="225" y2="195" opacity="0.3"/>
+          <rect x="135" y="85" width="30" height="25" fill="currentColor" fill-opacity="0.1"/>
+          <line x1="150" y1="85" x2="150" y2="110" stroke-width="2"/>
+          <line x1="135" y1="97" x2="165" y2="97" stroke-width="2"/>
+          <line x1="0" y1="325" x2="300" y2="325" stroke-width="2" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="caption"><span>HOSPITAL · CORRIENTE CRÍTICA</span><span class="num">005 / 22</span></div>
+    </a>
+
+    <a href="#" class="gallery-item reveal reveal-delay-2">
+      <div class="gallery-illustration">
+        <svg viewBox="0 0 300 375" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="100" y="40" width="100" height="280" fill="currentColor" fill-opacity="0.03"/>
+          <line x1="100" y1="80" x2="200" y2="80" opacity="0.3"/>
+          <line x1="100" y1="120" x2="200" y2="120" opacity="0.3"/>
+          <line x1="100" y1="160" x2="200" y2="160" opacity="0.3"/>
+          <line x1="100" y1="200" x2="200" y2="200" opacity="0.3"/>
+          <line x1="100" y1="240" x2="200" y2="240" opacity="0.3"/>
+          <line x1="100" y1="280" x2="200" y2="280" opacity="0.3"/>
+          <rect x="115" y="50" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="140" y="50" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="165" y="50" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="115" y="90" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="140" y="90" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="165" y="90" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="115" y="130" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="140" y="130" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="165" y="130" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="115" y="170" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="140" y="170" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="165" y="170" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="115" y="210" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="140" y="210" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="165" y="210" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="115" y="250" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="140" y="250" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <rect x="165" y="250" width="16" height="20" fill="currentColor" fill-opacity="0.06"/>
+          <circle cx="123" cy="60" r="2" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="148" cy="60" r="2" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="173" cy="60" r="2"/>
+          <circle cx="123" cy="100" r="2" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="148" cy="100" r="2"/>
+          <circle cx="173" cy="100" r="2" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="123" cy="180" r="2" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="148" cy="180" r="2" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="173" cy="180" r="2" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="123" cy="220" r="2"/>
+          <circle cx="148" cy="220" r="2" fill="currentColor" fill-opacity="0.6"/>
+          <circle cx="173" cy="220" r="2"/>
+          <line x1="60" y1="325" x2="240" y2="325" stroke-width="2" opacity="0.3"/>
+          <rect x="70" y="285" width="30" height="35" fill="currentColor" fill-opacity="0.03"/>
+          <rect x="200" y="285" width="30" height="35" fill="currentColor" fill-opacity="0.03"/>
+        </svg>
+      </div>
+      <div class="caption"><span>EDIFICIO CORPORATIVO</span><span class="num">006 / 24</span></div>
+    </a>
+
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat reveal">
+      <div class="stat-num">14<span class="unit">años</span></div>
+      <div class="stat-label">Operación continua<br>desde 2010</div>
+    </div>
+    <div class="stat reveal reveal-delay-1">
+      <div class="stat-num">320<span class="unit">+</span></div>
+      <div class="stat-label">Proyectos completados<br>industria y comercio</div>
+    </div>
+    <div class="stat reveal reveal-delay-2">
+      <div class="stat-num">1.2<span class="unit">MW</span></div>
+      <div class="stat-label">Capacidad solar<br>fotovoltaica instalada</div>
+    </div>
+    <div class="stat reveal reveal-delay-3">
+      <div class="stat-num">24<span class="unit">/7</span></div>
+      <div class="stat-label">Disponibilidad crítica<br>con contrato de servicio</div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section class="capabilities">
+  <div class="opener reveal">
+    <span class="opener-rule"></span>
+    <span class="opener-label">/ 04 — Capacidades</span>
+  </div>
+  <div class="capabilities-grid">
+    <div class="reveal reveal-delay-1">
+      <h2 class="manifesto-title">Infraestructura <span class="accent">y certificaciones.</span></h2>
+      <p style="color: var(--text-soft); margin-top: 1.5rem; line-height: 1.7;">El equipo y las certificaciones definen qué trabajos podemos asumir. Aquí los datos verificables.</p>
+    </div>
+    <div class="capabilities-list reveal reveal-delay-2">
+      <div class="cap-row"><span class="key">Voltaje BT</span><span class="val">hasta 1000V</span></div>
+      <div class="cap-row"><span class="key">Voltaje MT</span><span class="val">hasta 33kV</span></div>
+      <div class="cap-row"><span class="key">Matrícula ENRE</span><span class="val">Vigente</span></div>
+      <div class="cap-row"><span class="key">Cert. IRAM</span><span class="val">2024</span></div>
+      <div class="cap-row"><span class="key">Técnicos</span><span class="val">12 en campo</span></div>
+      <div class="cap-row"><span class="key">Ingenieros</span><span class="val">3 titulados</span></div>
+      <div class="cap-row"><span class="key">Taller</span><span class="val">CABA 240m²</span></div>
+      <div class="cap-row"><span class="key">Cobertura</span><span class="val">CABA + GBA</span></div>
+      <div class="cap-row"><span class="key">Vehículos</span><span class="val">5 utilitarios</span></div>
+      <div class="cap-row"><span class="key">Termógrafa IR</span><span class="val">Fluke TiX580</span></div>
+      <div class="cap-row"><span class="key">Megóhmetro</span><span class="val">5kV</span></div>
+      <div class="cap-row"><span class="key">Tierra</span><span class="val">Telurómetro</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="proceso">
+  <div class="process-head">
+    <div class="opener reveal">
+      <span class="opener-rule"></span>
+      <span class="opener-label">/ 05 — Proceso</span>
+    </div>
+    <h2 class="reveal reveal-delay-1">Cinco etapas. <span class="accent">Sin atajos.</span></h2>
+    <p class="reveal reveal-delay-2">Cada proyecto entra por la misma puerta y recorre el mismo camino. Lo que cambia es la escala, no el rigor.</p>
+  </div>
+  <div class="process-list">
+    <div class="process-step reveal">
+      <div class="step-num">01</div>
+      <div class="step-name">Diagnóstico de sitio</div>
+      <div class="step-desc">Visita técnica, levantamiento de cargas, estado de tableros, recorrido de canalizaciones. Entregamos acta con fotografías y mediciones.</div>
+      <div class="step-meta">1—3 DÍAS<br>SIN COSTO</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">02</div>
+      <div class="step-name">Ingeniería y planos</div>
+      <div class="step-desc">Memoria de cálculo, planos unifilares, diagramas de control, especificaciones técnicas. Revisión con cliente antes de ejecución.</div>
+      <div class="step-meta">5—10 DÍAS<br>INCLUIDO</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">03</div>
+      <div class="step-name">Ejecución</div>
+      <div class="step-desc">Instalación con técnicos propios, supervisión de ingeniero residente, bitácora de obra semanal. Coordinación con otras especialidades.</div>
+      <div class="step-meta">SEGÚN PROYECTO<br>EQUIPO DEDICADO</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">04</div>
+      <div class="step-name">Pruebas y certificación</div>
+      <div class="step-desc">Protocolo completo de ensayos eléctricos, termografía, ajuste de protecciones. Informe firmado por ingeniero responsable. Certificación IRAM-IEC.</div>
+      <div class="step-meta">2—4 DÍAS<br>INFORME FIRMADO</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">05</div>
+      <div class="step-name">Mantenimiento</div>
+      <div class="step-desc">Contrato preventivo calendarizado, respuesta correctiva &lt;4h, revisión termográfica anual. La instalación entra a nuestra memoria.</div>
+      <div class="step-meta">ANUAL<br>SLA 4H</div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote">
+  <div class="quote-mark reveal">"</div>
+  <p class="quote-text reveal reveal-delay-1">No medimos proyectos por metros de cable tendido, sino por horas de operación sin interrupción después de la entrega.</p>
+  <div class="quote-attr reveal reveal-delay-2">— CARLOS SANTA CRUZ · INGENIERO FUNDADOR · CSAN INGENIERÍA</div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contacto">
+  <div class="opener reveal" style="justify-content: center;">
+    <span class="opener-rule"></span>
+    <span class="opener-label">/ 06 — Contacto</span>
+    <span class="opener-rule"></span>
+  </div>
+  <h2 class="reveal reveal-delay-1">Conversemos sobre su <span class="accent">próximo proyecto.</span></h2>
+  <a href="mailto:contacto@csaningenieria.com.ar" class="contact-cta reveal reveal-delay-2">
+    Solicitar diagnóstico <span class="btn-arrow">→</span>
+  </a>
+  <div class="contact-info">
+    <div class="contact-block reveal">
+      <div class="label-sm">/ Oficina central</div>
+      <div class="value">Av. Corrientes 3458, Piso 5<br>Ciudad Autónoma de Buenos Aires<br>Argentina · C1193AAJ</div>
+    </div>
+    <div class="contact-block reveal reveal-delay-1">
+      <div class="label-sm">/ Contacto directo</div>
+      <div class="value">
+        <a href="mailto:contacto@csaningenieria.com.ar">contacto@csaningenieria.com.ar</a><br>
+        <a href="tel:+541148912345">+54 11 4891 2345</a><br>
+        <a href="tel:+5491112345678">+54 9 11 1234 5678</a>
+      </div>
+    </div>
+    <div class="contact-block reveal reveal-delay-2">
+      <div class="label-sm">/ Horario</div>
+      <div class="value">Lunes a viernes · 08:00—18:00<br>Guardia 24/7 con contrato<br>Respuesta &lt;4h en SLA</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><span class="brand">CSAN<span>.</span>INGENIERÍA</span> · 2010—2025</div>
+    <div>ENRE · AEA · NORMA IRAM-IEC 60364</div>
+    <div>BUENOS AIRES · CABA · ARGENTINA</div>
+  </div>
+</footer>
+
+<script>
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+(function initScrollProgress() {
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+  let ticking = false;
+  function update() {
+    const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    bar.style.width = Math.min(100, Math.max(0, scrolled)) + '%';
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  update();
+})();
+
+(function initNavScroll() {
+  const nav = document.getElementById('nav');
+  if (!nav) return;
+  let ticking = false;
+  function update() {
+    if (window.scrollY > 60) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+})();
+
+(function initHero() {
+  if (typeof gsap === 'undefined' || reduceMotion) {
+    ['#hero-eyebrow', '#hero-title', '#hero-sub', '#hero-cta'].forEach(sel => {
+      const el = document.querySelector(sel);
+      if (el) { el.style.opacity = 1; el.style.transform = 'none'; }
+    });
+    return;
+  }
+  const tl = gsap.timeline({ delay: 0.3 });
+  tl.fromTo('#hero-eyebrow', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' })
+    .fromTo('#hero-title',   { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out' }, '-=0.4')
+    .fromTo('#hero-sub',     { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6')
+    .fromTo('#hero-cta',     { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.5');
+})();
+
+(function initReveal() {
+  const reveals = document.querySelectorAll('.reveal');
+  if (!reveals.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+})();
+
+(function initStackedCards() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  const cards = document.querySelectorAll('.cardstack__card');
+  if (!cards.length) return;
+
+  function setInitial() {
+    cards.forEach((card, i) => {
+      gsap.set(card, {
+        y: i === 0 ? 0 : window.innerHeight * 0.6,
+        opacity: i === 0 ? 1 : 0,
+        scale: 1,
+        zIndex: i,
+        filter: 'brightness(1)'
+      });
+    });
+  }
+  setInitial();
+
+  const seg = 1 / cards.length;
+
+  ScrollTrigger.create({
+    trigger: '#cardstack-pin',
+    start: 'top top',
+    end: '+=' + (cards.length * 75) + '%',
+    pin: true,
+    pinSpacing: true,
+    scrub: 1,
+    anticipatePin: 1,
+    invalidateOnRefresh: true,
+    onUpdate: (self) => {
+      cards.forEach((card, i) => {
+        const cp = gsap.utils.clamp(0, 1, (self.progress - i * seg) / seg);
+        const pp = gsap.utils.clamp(0, 1, (self.progress - (i - 1) * seg) / seg);
+
+        if (i === 0) {
+          gsap.set(card, {
+            y: 0,
+            opacity: 1 - cp * 0.4,
+            scale: 1 - cp * 0.05,
+            filter: 'brightness(' + (1 - cp * 0.35) + ')',
+            zIndex: i
+          });
+        } else if (i === cards.length - 1) {
+          gsap.set(card, {
+            y: (1 - pp) * window.innerHeight * 0.6,
+            opacity: pp,
+            scale: 1,
+            filter: 'brightness(1)',
+            zIndex: i
+          });
+        } else {
+          gsap.set(card, {
+            y: (1 - pp) * window.innerHeight * 0.6,
+            opacity: pp - cp * 0.4,
+            scale: 1 - cp * 0.05,
+            filter: 'brightness(' + (1 - cp * 0.35) + ')',
+            zIndex: i
+          });
+        }
+      });
+    },
+    onLeaveBack: setInitial
+  });
+})();
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const href = a.getAttribute('href');
+    if (href === '#' || href.length < 2) return;
+    const target = document.querySelector(href);
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
