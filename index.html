@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CSAN Ingeniería — Instalaciones y Mantenimiento Eléctrico</title>
+
+<!-- Favicon (Logo en la pestaña del navegador) -->
+<link rel="icon" type="image/jpeg" href="https://i.imgur.com/OWobKea.jpeg">
+<link rel="apple-touch-icon" href="https://i.imgur.com/OWobKea.jpeg">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -79,11 +84,16 @@ img { display: block; max-width: 100%; }
   backdrop-filter: blur(8px);
   border-bottom-color: var(--line);
 }
-.nav-brand {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: 0.95rem; letter-spacing: 0.02em;
+
+.nav-logo {
+  height: 68px;
+  width: auto;
+  object-fit: contain;
 }
-.nav-brand span { color: var(--highlight); }
+@media (max-width: 768px) {
+  .nav-logo { height: 48px; }
+}
+
 .nav-links { display: flex; gap: 2.5rem; }
 .nav-links a {
   font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
@@ -648,6 +658,10 @@ section { position: relative; z-index: 2; }
 }
 .footer-grid .brand { color: var(--text); font-weight: 500; }
 .footer-grid .brand span { color: var(--highlight); }
+.footer-logo {
+  height: 48px;
+  width: auto;
+}
 
 .reveal {
   opacity: 0; transform: translateY(40px);
@@ -678,7 +692,10 @@ section { position: relative; z-index: 2; }
 <div class="scroll-progress" id="scroll-progress"></div>
 
 <nav class="nav" id="nav">
-  <div class="nav-brand">CSAN<span>.</span>INGENIERÍA</div>
+  <a href="#" class="nav-brand">
+    <img src="https://i.imgur.com/OWobKea.jpeg" alt="CSAN Ingeniería" class="nav-logo">
+  </a>
+  
   <div class="nav-links">
     <a href="#manifiesto">Manifiesto</a>
     <a href="#servicios">Servicios</a>
@@ -756,7 +773,7 @@ section { position: relative; z-index: 2; }
     <div class="cardstack__card">
       <div class="card-img">
         <div class="card-img-label">SERVICIO 01</div>
-        <img src="images/electrical1.jpg" alt="Mantenimiento eléctrico" loading="lazy">
+        <img src="https://i.imgur.com/x9TavpE.jpeg" alt="Mantenimiento eléctrico" loading="lazy">
       </div>
       <div class="card-content">
         <div>
@@ -774,7 +791,7 @@ section { position: relative; z-index: 2; }
     <div class="cardstack__card">
       <div class="card-img">
         <div class="card-img-label">SERVICIO 02</div>
-        <img src="images/electrical3.jpg" alt="Instalación industrial y comercial" loading="lazy">
+        <img src="https://i.imgur.com/BSzgjmg.jpeg" alt="Instalación industrial y comercial" loading="lazy">
       </div>
       <div class="card-content">
         <div>
@@ -792,7 +809,7 @@ section { position: relative; z-index: 2; }
     <div class="cardstack__card">
       <div class="card-img">
         <div class="card-img-label">SERVICIO 03</div>
-        <img src="images/electrical4.jpg" alt="Tableros y automatización" loading="lazy">
+        <img src="https://i.imgur.com/B1h5wkQ.jpeg" alt="Tableros y automatización" loading="lazy">
       </div>
       <div class="card-content">
         <div>
@@ -810,7 +827,7 @@ section { position: relative; z-index: 2; }
     <div class="cardstack__card">
       <div class="card-img">
         <div class="card-img-label">SERVICIO 04</div>
-        <img src="images/electrical5.jpg" alt="Mantenimiento preventivo y correctivo" loading="lazy">
+        <img src="https://i.imgur.com/XoLeinG.jpeg" alt="Mantenimiento preventivo y correctivo" loading="lazy">
       </div>
       <div class="card-content">
         <div>
@@ -828,7 +845,7 @@ section { position: relative; z-index: 2; }
     <div class="cardstack__card">
       <div class="card-img">
         <div class="card-img-label">SERVICIO 05</div>
-        <img src="images/electrical6.jpg" alt="Sistema de respaldo y corriente crítica" loading="lazy">
+        <img src="https://i.imgur.com/7CfkIuJ.jpeg" alt="Sistema de respaldo y corriente crítica" loading="lazy">
       </div>
       <div class="card-content">
         <div>
@@ -846,7 +863,7 @@ section { position: relative; z-index: 2; }
     <div class="cardstack__card">
       <div class="card-img">
         <div class="card-img-label">SERVICIO 06</div>
-        <img src="images/electrical7.jpg" alt="Instalación de paneles solares" loading="lazy">
+        <img src="https://i.imgur.com/YeiYjUa.jpeg" alt="Instalación de paneles solares" loading="lazy">
       </div>
       <div class="card-content">
         <div>
@@ -864,7 +881,7 @@ section { position: relative; z-index: 2; }
     <div class="cardstack__card">
       <div class="card-img">
         <div class="card-img-label">SERVICIO 07</div>
-        <img src="images/electrical8.jpg" alt="Domótica e inmótica" loading="lazy">
+        <img src="https://i.imgur.com/sREYKKf.jpeg" alt="Domótica e inmótica" loading="lazy">
       </div>
       <div class="card-content">
         <div>
@@ -882,7 +899,7 @@ section { position: relative; z-index: 2; }
     <div class="cardstack__card">
       <div class="card-img">
         <div class="card-img-label">SERVICIO 08</div>
-        <img src="images/pic01.jpg" alt="Pruebas eléctricas" loading="lazy">
+        <img src="https://i.imgur.com/B1h5wkQ.jpeg" alt="Pruebas eléctricas" loading="lazy">
       </div>
       <div class="card-content">
         <div>
@@ -900,7 +917,7 @@ section { position: relative; z-index: 2; }
     <div class="cardstack__card">
       <div class="card-img">
         <div class="card-img-label">SERVICIO 09</div>
-        <img src="images/pic02.jpg" alt="Cañerías eléctricas" loading="lazy">
+        <img src="https://i.imgur.com/BSzgjmg.jpeg" alt="Cañerías eléctricas" loading="lazy">
       </div>
       <div class="card-content">
         <div>
@@ -929,27 +946,27 @@ section { position: relative; z-index: 2; }
   </div>
   <div class="gallery-grid">
     <a href="#" class="gallery-item reveal">
-      <div class="img-wrap"><img src="https://picsum.photos/seed/power-substation-transformer-electrical/600/750" alt="Subestación planta norte" loading="lazy"></div>
+      <div class="img-wrap"><img src="https://i.imgur.com/x9TavpE.jpeg" alt="Proyecto Subestación" loading="lazy"></div>
       <div class="caption"><span>SUBESTACIÓN PLANTA NORTE</span><span class="num">001 / 24</span></div>
     </a>
     <a href="#" class="gallery-item reveal reveal-delay-1">
-      <div class="img-wrap"><img src="https://picsum.photos/seed/industrial-control-panel-electrical-cabinet/600/750" alt="Tablero seccional industria" loading="lazy"></div>
+      <div class="img-wrap"><img src="https://i.imgur.com/B1h5wkQ.jpeg" alt="Tablero seccional industria" loading="lazy"></div>
       <div class="caption"><span>TABLERO SECCIONAL INDUSTRIA</span><span class="num">002 / 23</span></div>
     </a>
     <a href="#" class="gallery-item reveal reveal-delay-2">
-      <div class="img-wrap"><img src="https://picsum.photos/seed/server-room-datacenter-racks-cabling/600/750" alt="Datacenter BT-A" loading="lazy"></div>
+      <div class="img-wrap"><img src="https://i.imgur.com/7CfkIuJ.jpeg" alt="Datacenter BT-A" loading="lazy"></div>
       <div class="caption"><span>DATACENTER BT-A</span><span class="num">003 / 24</span></div>
     </a>
     <a href="#" class="gallery-item reveal">
-      <div class="img-wrap"><img src="https://picsum.photos/seed/solar-panel-installation-rooftop-industrial/600/750" alt="Solar rooftop 400kWp" loading="lazy"></div>
+      <div class="img-wrap"><img src="https://i.imgur.com/YeiYjUa.jpeg" alt="Solar rooftop 400kWp" loading="lazy"></div>
       <div class="caption"><span>SOLAR ROOFTOP 400KWP</span><span class="num">004 / 23</span></div>
     </a>
     <a href="#" class="gallery-item reveal reveal-delay-1">
-      <div class="img-wrap"><img src="https://picsum.photos/seed/hospital-electrical-backup-generator-critical/600/750" alt="Hospital corriente crítica" loading="lazy"></div>
+      <div class="img-wrap"><img src="https://i.imgur.com/XoLeinG.jpeg" alt="Hospital corriente crítica" loading="lazy"></div>
       <div class="caption"><span>HOSPITAL · CORRIENTE CRÍTICA</span><span class="num">005 / 22</span></div>
     </a>
     <a href="#" class="gallery-item reveal reveal-delay-2">
-      <div class="img-wrap"><img src="https://picsum.photos/seed/corporate-building-electrical-infrastructure/600/750" alt="Edificio corporativo" loading="lazy"></div>
+      <div class="img-wrap"><img src="https://i.imgur.com/sREYKKf.jpeg" alt="Edificio corporativo" loading="lazy"></div>
       <div class="caption"><span>EDIFICIO CORPORATIVO</span><span class="num">006 / 24</span></div>
     </a>
   </div>
@@ -1084,7 +1101,10 @@ section { position: relative; z-index: 2; }
 
 <footer class="footer">
   <div class="footer-grid">
-    <div><span class="brand">CSAN<span>.</span>INGENIERÍA</span> · 2010—2025</div>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <img src="https://i.imgur.com/OWobKea.jpeg" alt="CSAN Ingeniería" class="footer-logo">
+      <span>2010—2025</span>
+    </div>
     <div>ENRE · AEA · NORMA IRAM-IEC 60364</div>
     <div>BUENOS AIRES · CABA · ARGENTINA</div>
   </div>
