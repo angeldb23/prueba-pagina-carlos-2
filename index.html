@@ -55,7 +55,6 @@ img { display: block; max-width: 100%; }
 }
 .nav-links a:hover { color: var(--accent); }
 
-/* Botón de Contacto arreglado */
 .nav-links a.nav-cta {
   padding: 0.6rem 1.2rem; background: var(--accent); color: #fff;
   font-weight: 600; border-radius: 4px; transition: all .3s ease;
@@ -64,9 +63,67 @@ img { display: block; max-width: 100%; }
   background: var(--accent-dark); color: #fff; 
 }
 
+/* BOTÓN MENÚ MÓVIL (Hamburguesa) */
+.nav-toggle {
+  display: none; /* Oculto en PC */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 28px;
+  height: 24px;
+  background: transparent;
+  cursor: pointer;
+  z-index: 101;
+}
+.nav-toggle span {
+  width: 100%;
+  height: 3px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 0.3s linear;
+  transform-origin: center;
+}
+.nav-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+.nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+.nav-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
 @media (max-width: 900px) {
   .nav { padding: 1rem 1.5rem; }
-  .nav-links { display: none; }
+  
+  .nav-toggle { display: flex; }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Empieza fuera de la pantalla */
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5rem;
+    transition: right 0.4s cubic-bezier(.22,1,.36,1);
+    z-index: 100;
+    border-left: 1px solid var(--line);
+  }
+  .nav-links.active {
+    right: 0; /* Aparece */
+  }
+  .nav-links a {
+    font-size: 1.5rem;
+    color: var(--text);
+  }
+  .nav-links a.nav-cta {
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+  }
 }
 
 /* HERO CON VIDEO */
@@ -74,7 +131,7 @@ img { display: block; max-width: 100%; }
   min-height: 90vh; display: flex; flex-direction: column; justify-content: flex-end;
   padding: 8rem 3rem 4rem 3rem;
   position: relative;
-  background-color: #000; /* Fondo negro mientras carga el video */
+  background-color: #000;
 }
 .hero-bg-video {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -360,15 +417,22 @@ img { display: block; max-width: 100%; }
 
 <nav class="nav">
   <a href="#"><img src="https://i.imgur.com/OWobKea.jpeg" alt="CSAN" class="nav-logo"></a>
-  <div class="nav-links">
+  
+  <div class="nav-links" id="navLinks">
     <a href="#manifiesto">Empresa</a>
     <a href="#servicios">Servicios</a>
     <a href="#proyectos">Proyectos</a>
     <a href="#contacto" class="nav-cta">Contacto</a>
   </div>
+
+  <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </nav>
 
-<!-- HERO CON VIDEO (Sin imagen poster para evitar parpadeos) -->
+<!-- HERO CON VIDEO -->
 <section class="hero">
   <video class="hero-bg-video" autoplay muted loop playsinline>
     <source src="https://i.imgur.com/e00L69u.mp4" type="video/mp4">
@@ -378,7 +442,7 @@ img { display: block; max-width: 100%; }
   <div class="hero-content">
     <div class="hero-eyebrow reveal"><span></span>INGENIERÍA ELÉCTRICA · DESDE 2010</div>
     <h1 class="hero-title reveal">Energía que <em>no falla.</em><br>Proyectos que perduran.</h1>
-    <p class="hero-sub reveal">Diseñamos, instalamos y mantenimos sistemas eléctricos industriales y comerciales con precisión milimétrica. Cada conexión revisada, cada tablero trazado.</p>
+    <p class="hero-sub reveal">Diseñamos, instalamos y mantenemos sistemas eléctricos industriales y comerciales con precisión milimétrica. Cada conexión revisada, cada tablero trazado.</p>
     <a href="#contacto" class="btn btn-primary reveal delay-1">Solicitar diagnóstico →</a>
   </div>
 </section>
@@ -659,6 +723,23 @@ document.addEventListener('DOMContentLoaded', () => {
       images.forEach(img => img.classList.remove('active'));
       const activeImg = document.getElementById(id);
       if (activeImg) activeImg.classList.add('active');
+    });
+  });
+
+  // MENÚ MÓVIL (Hamburguesa)
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+
+  navToggle.addEventListener('click', () => {
+    navToggle.classList.toggle('active');
+    navLinks.classList.toggle('active');
+  });
+
+  // Cerrar menú al hacer clic en un enlace
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navToggle.classList.remove('active');
+      navLinks.classList.remove('active');
     });
   });
 });
