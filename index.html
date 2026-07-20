@@ -5,1248 +5,661 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CSAN Ingeniería — Instalaciones y Mantenimiento Eléctrico</title>
 
-<!-- Favicon (Logo en la pestaña del navegador) -->
 <link rel="icon" type="image/jpeg" href="https://i.imgur.com/OWobKea.jpeg">
 <link rel="apple-touch-icon" href="https://i.imgur.com/OWobKea.jpeg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap">
-
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap">
 
 <style>
 :root {
-  --bg: #0a1628;
-  --deep: #0d1d35;
-  --card: #122844;
-  --text: #ffffff;
-  --text-soft: rgba(255,255,255,0.62);
-  --text-mute: rgba(255,255,255,0.32);
-  --line: rgba(255,255,255,0.1);
-  --line-strong: rgba(255,255,255,0.18);
-  --highlight: #ff7a1a;
-  --highlight-soft: rgba(255,122,26,0.4);
-  --accent-blue: #3b82f6;
-  --ease-quiet: cubic-bezier(.22, 1, .36, 1);
-  --ease-precise: cubic-bezier(.4, 0, .2, 1);
-  --ease-emphasis: cubic-bezier(.16, 1, .3, 1);
+  --bg: #F8FAFC;
+  --text: #0F172A;
+  --text-soft: #475569;
+  --text-mute: #94A3B8;
+  --line: #E2E8F0;
+  --accent: #1D4ED8;
+  --accent-dark: #1E3A8A;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-::selection { background: var(--highlight); color: #fff; }
-
-html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+::selection { background: var(--accent); color: #fff; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 
 body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Inter', sans-serif;
-  font-weight: 400;
   line-height: 1.5;
   overflow-x: hidden;
 }
 
-a, button { color: inherit; text-decoration: none; font-family: inherit; background: none; border: none; }
-
+a, button { text-decoration: none; color: inherit; background: none; border: none; font-family: inherit; cursor: pointer; }
 img { display: block; max-width: 100%; }
 
-.bg-glow {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 100%, rgba(255,122,26,0.07), transparent 60%),
-    radial-gradient(ellipse 50% 35% at 15% 5%, rgba(59,130,246,0.05), transparent 55%);
-}
-.bg-grain {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.scroll-progress {
-  position: fixed; top: 0; left: 0; height: 2px;
-  background: var(--highlight); z-index: 200;
-  width: 0%; transition: width .08s linear;
-  box-shadow: 0 0 8px var(--highlight-soft);
-}
-
+/* HEADER */
 .nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  padding: 1.5rem 2rem;
+  padding: 1.25rem 3rem;
   display: flex; justify-content: space-between; align-items: center;
-  transition: background .4s var(--ease-quiet), border-color .4s var(--ease-quiet);
-  border-bottom: 1px solid transparent;
+  background: rgba(248, 250, 252, 0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
 }
-.nav.scrolled {
-  background: rgba(10,22,40,0.9);
-  backdrop-filter: blur(8px);
-  border-bottom-color: var(--line);
-}
-
-.nav-logo {
-  height: 68px;
-  width: auto;
-  object-fit: contain;
-}
-@media (max-width: 768px) {
-  .nav-logo { height: 48px; }
-}
-
-.nav-links { display: flex; gap: 2.5rem; }
+.nav-logo { height: 40px; width: auto; }
+.nav-links { display: flex; gap: 2.5rem; align-items: center; }
 .nav-links a {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--text-soft); transition: color .3s var(--ease-quiet);
-  position: relative;
+  font-size: 0.85rem; font-weight: 500; color: var(--text-soft);
+  transition: color .3s ease; position: relative; text-transform: uppercase; letter-spacing: 0.05em;
 }
-.nav-links a::after {
-  content: ''; position: absolute; bottom: -4px; left: 0;
-  width: 0; height: 1px; background: var(--highlight);
-  transition: width .4s var(--ease-quiet);
+.nav-links a:hover { color: var(--accent); }
+
+/* Botón de Contacto arreglado */
+.nav-links a.nav-cta {
+  padding: 0.6rem 1.2rem; background: var(--accent); color: #fff;
+  font-weight: 600; border-radius: 4px; transition: all .3s ease;
 }
-.nav-links a:hover { color: var(--text); }
-.nav-links a:hover::after { width: 100%; }
-.nav-status {
-  display: flex; align-items: center; gap: 0.5rem;
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
-  letter-spacing: 0.1em; color: var(--text-soft);
+.nav-links a.nav-cta:hover { 
+  background: var(--accent-dark); color: #fff; 
 }
-.nav-status .dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--highlight); box-shadow: 0 0 8px var(--highlight-soft);
-}
+
 @media (max-width: 900px) {
-  .nav-links, .nav-status { display: none; }
+  .nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
 }
 
-section { position: relative; z-index: 2; }
-
-.opener {
-  display: flex; align-items: center; gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-.opener-rule {
-  width: 56px; height: 2px; background: var(--highlight);
-  box-shadow: 0 0 12px var(--highlight-soft);
-}
-.opener-label {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
-  letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--text-soft);
-}
-
+/* HERO CON VIDEO */
 .hero {
-  min-height: 100vh; display: flex; flex-direction: column;
-  justify-content: flex-end; padding: 8rem 2rem 5rem;
-  position: relative; z-index: 2;
+  min-height: 90vh; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 8rem 3rem 4rem 3rem;
+  position: relative;
+  background-color: #000; /* Fondo negro mientras carga el video */
 }
-.hero-inner { max-width: 1400px; margin: 0 auto; width: 100%; }
+.hero-bg-video {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 0;
+}
+.hero-bg-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(100deg, rgba(10,30,60,0.95) 0%, rgba(10,30,60,0.7) 50%, rgba(10,30,60,0.4) 100%);
+}
+.hero-content { position: relative; z-index: 2; max-width: 1200px; margin: 0 auto; width: 100%; }
 .hero-eyebrow {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;
-  letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--text-soft); margin-bottom: 2rem;
-  display: flex; align-items: center; gap: 1rem;
-  opacity: 0; transform: translateY(20px);
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  color: rgba(255,255,255,0.8); margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;
 }
-.hero-eyebrow .pulse {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--highlight); box-shadow: 0 0 10px var(--highlight-soft);
-}
+.hero-eyebrow span { width: 32px; height: 1px; background: #60a5fa; }
 .hero-title {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: clamp(3rem, 10vw, 9rem); line-height: 0.88;
-  letter-spacing: -0.035em; margin-bottom: 2.5rem;
-  opacity: 0; transform: translateY(60px);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(3rem, 7vw, 7rem); line-height: 0.95; font-weight: 700;
+  letter-spacing: -0.04em; margin-bottom: 2rem; max-width: 1000px; color: #fff;
 }
-.hero-title .accent { color: var(--highlight); }
-.hero-sub {
-  max-width: 580px; font-size: 1.1rem; line-height: 1.6;
-  color: var(--text-soft); margin-bottom: 3rem;
-  opacity: 0; transform: translateY(30px);
-}
-.hero-cta {
-  display: flex; gap: 1rem; flex-wrap: wrap;
-  opacity: 0; transform: translateY(20px);
-}
+.hero-title em { font-style: normal; color: #60a5fa; }
+.hero-sub { max-width: 500px; font-size: 1.1rem; color: rgba(255,255,255,0.85); margin-bottom: 2.5rem; line-height: 1.6; }
 .btn {
-  display: inline-flex; align-items: center; gap: 0.75rem;
-  padding: 1rem 1.75rem; border: 1px solid var(--line-strong);
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  transition: border-color .4s var(--ease-quiet), color .4s var(--ease-quiet), background .4s var(--ease-quiet);
-  background: transparent;
+  display: inline-flex; align-items: center; gap: 0.75rem; padding: 1rem 1.75rem;
+  font-size: 0.85rem; font-weight: 600; text-transform: uppercase; width: fit-content;
+  transition: all .3s ease; border: 1px solid #fff; color: #fff;
 }
-.btn:hover { border-color: var(--highlight); color: var(--highlight); }
-.btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-.btn-primary:hover { background: transparent; color: var(--highlight); border-color: var(--highlight); }
-.btn-arrow { font-size: 0.9rem; transition: transform .4s var(--ease-quiet); }
-.btn:hover .btn-arrow { transform: translateX(4px); }
+.btn:hover { background: #fff; color: var(--text); }
+.btn-primary { background: var(--accent); border-color: var(--accent); }
+.btn-primary:hover { background: #fff; color: var(--accent); border-color: #fff; }
 
-.hero-meta {
-  position: absolute; bottom: 2rem; right: 2rem;
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
-  letter-spacing: 0.1em; color: var(--text-mute);
-  text-align: right; line-height: 1.8;
+/* CLIENTES */
+.clients {
+  padding: 4rem 3rem; background: #fff; border-bottom: 1px solid var(--line);
 }
-.hero-edge {
-  position: absolute; bottom: 2rem; left: 2rem;
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
-  letter-spacing: 0.15em; color: var(--text-mute);
-  line-height: 1.8;
+.clients-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
+.clients-title {
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-mute); margin-bottom: 2.5rem;
 }
-.hero-edge .v { color: var(--text); font-weight: 500; }
-
-@media (max-width: 768px) {
-  .hero { padding: 7rem 1.5rem 4rem; }
-  .hero-meta, .hero-edge { font-size: 0.6rem; }
-  .hero-edge { bottom: 1.5rem; left: 1.5rem; }
-  .hero-meta { bottom: 1.5rem; right: 1.5rem; }
+.clients-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 3rem; align-items: center; justify-items: center;
+}
+.client-img {
+  max-height: 70px;
+  max-width: 140px; 
+  object-fit: contain; 
+  filter: grayscale(100%) opacity(0.6); 
+  transition: all .3s ease;
+}
+.client-img:hover { 
+  filter: grayscale(0%) opacity(1); 
+  transform: scale(1.05);
 }
 
-.marquee {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  overflow: hidden; padding: 1.25rem 0;
-  position: relative; z-index: 2;
-  background: var(--bg);
-}
-.marquee-track {
-  display: flex; gap: 3rem;
-  animation: marquee 60s linear infinite;
-  white-space: nowrap; will-change: transform;
-}
-.marquee-item {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: 1.4rem; letter-spacing: -0.01em;
-  color: var(--text-mute);
-  display: flex; align-items: center; gap: 3rem;
-}
-.marquee-item .sep {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--highlight);
-}
-@keyframes marquee { to { transform: translateX(-50%); } }
-
-.manifesto {
-  padding: 10rem 2rem 8rem;
-  max-width: 1400px; margin: 0 auto;
-}
+/* MANIFIESTO */
+.manifesto { padding: 10rem 3rem; background: var(--bg); position: relative; overflow: hidden; }
 .manifesto-grid {
-  display: grid; grid-template-columns: 1fr 2fr;
-  gap: 5rem; align-items: start;
-}
-.manifesto-title {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: clamp(2rem, 4.2vw, 3.5rem); line-height: 0.95;
-  letter-spacing: -0.025em; margin-bottom: 2.5rem;
-}
-.manifesto-title .accent { color: var(--highlight); }
-.manifesto-body p {
-  font-size: 1.05rem; line-height: 1.75;
-  color: var(--text-soft); margin-bottom: 1.5rem;
-}
-.manifesto-body p strong { color: var(--text); font-weight: 500; }
-
-@media (max-width: 768px) {
-  .manifesto { padding: 6rem 1.5rem 5rem; }
-  .manifesto-grid { grid-template-columns: 1fr; gap: 2rem; }
-}
-
-#cardstack { position: relative; z-index: 2; }
-.cardstack-intro {
-  padding: 8rem 2rem 4rem;
-  max-width: 1400px; margin: 0 auto;
-}
-.cardstack-intro h2 {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: clamp(2rem, 4.2vw, 3.5rem); line-height: 0.95;
-  letter-spacing: -0.025em; max-width: 800px; margin-top: 1.5rem;
-}
-.cardstack-intro h2 .accent { color: var(--highlight); }
-.cardstack-intro p {
-  font-size: 1rem; color: var(--text-soft);
-  max-width: 520px; margin-top: 1.5rem; line-height: 1.6;
-}
-#cardstack-pin {
-  height: 100vh; position: relative; overflow: hidden;
-}
-.cardstack__card {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: min(1100px, 92vw);
-  height: min(600px, 80vh);
-  background: var(--card);
-  border: 1px solid var(--line-strong);
-  display: grid; grid-template-columns: 1.1fr 1fr;
-  overflow: hidden;
-  will-change: transform, opacity;
-  box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
-}
-
-.cardstack__card .card-img {
-  position: relative; overflow: hidden; background: var(--deep);
-}
-.cardstack__card .card-img img {
-  width: 100%; height: 100%; object-fit: cover;
-  filter: grayscale(0.2) brightness(0.8) contrast(1.1);
-}
-.cardstack__card .card-img::after {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(13,29,53,0.3) 0%, rgba(13,29,53,0.55) 100%);
-}
-.cardstack__card .card-img-label {
-  position: absolute; top: 1.5rem; left: 1.5rem;
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--text); z-index: 3;
-  padding: 0.4rem 0.7rem; border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(13,29,53,0.6); backdrop-filter: blur(6px);
-}
-.cardstack__card .card-content {
-  padding: 2.75rem 2.5rem; display: flex; flex-direction: column;
-  justify-content: space-between; gap: 2rem;
-}
-.cardstack__card .card-num {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
-  letter-spacing: 0.25em; color: var(--text-mute);
-  display: flex; justify-content: space-between; align-items: center;
-}
-.cardstack__card .card-num .marker {
-  width: 24px; height: 2px; background: var(--highlight);
-  box-shadow: 0 0 8px var(--highlight-soft);
-}
-.cardstack__card .card-title {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: clamp(1.4rem, 2.4vw, 2.2rem); line-height: 0.98;
-  letter-spacing: -0.022em; margin-top: 1.5rem;
-}
-.cardstack__card .card-desc {
-  font-size: 0.92rem; line-height: 1.65; color: var(--text-soft);
-  margin-top: 1.25rem;
-}
-.cardstack__card .card-tags {
-  display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem;
-}
-.cardstack__card .card-tag {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 0.4rem 0.7rem; border: 1px solid var(--line-strong);
-  color: var(--text-soft);
-  transition: border-color .3s var(--ease-quiet), color .3s var(--ease-quiet);
-}
-.cardstack__card .card-tag:hover { border-color: var(--highlight); color: var(--text); }
-.cardstack__card .card-footer {
-  display: flex; justify-content: space-between; align-items: flex-end;
-  padding-top: 1.5rem; border-top: 1px solid var(--line);
-}
-.cardstack__card .card-tag-line {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
-  letter-spacing: 0.15em; color: var(--text-mute);
-}
-.cardstack__card .card-arrow {
-  font-size: 1.4rem; color: var(--text-soft);
-  transition: color .3s var(--ease-quiet), transform .3s var(--ease-quiet);
-}
-.cardstack__card:hover .card-arrow { color: var(--highlight); transform: translateX(4px); }
-
-@media (max-width: 768px) {
-  .cardstack-intro { padding: 5rem 1.5rem 2rem; }
-  .cardstack__card {
-    grid-template-columns: 1fr;
-    height: 85vh; width: 92vw;
-  }
-  .cardstack__card .card-img { height: 180px; }
-  .cardstack__card .card-content { padding: 1.5rem; gap: 1rem; }
-  .cardstack__card .card-title { font-size: 1.4rem; margin-top: 0.75rem; }
-  .cardstack__card .card-desc { font-size: 0.85rem; margin-top: 0.75rem; }
-  .cardstack__card .card-tags { margin-top: 0.75rem; }
-}
-
-.gallery {
-  padding: 10rem 2rem;
-  max-width: 1400px; margin: 0 auto;
-}
-.gallery-head {
-  display: flex; justify-content: space-between; align-items: flex-end;
-  margin-bottom: 4rem; gap: 2rem; flex-wrap: wrap;
-}
-.gallery-head h2 {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: clamp(2rem, 4.2vw, 3.5rem); line-height: 0.95;
-  letter-spacing: -0.025em; max-width: 700px;
-}
-.gallery-head h2 .accent { color: var(--highlight); }
-.gallery-head .meta {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--text-soft); max-width: 260px; text-align: right;
-  line-height: 1.7;
-}
-.gallery-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-}
-.gallery-item {
-  display: block; padding: 12px;
-  border: 1px solid var(--line);
-  transition: border-color .4s var(--ease-emphasis);
-  background: var(--deep);
-  position: relative;
-}
-.gallery-item:hover { border-color: var(--highlight); }
-.gallery-item::before,
-.gallery-item::after {
-  content: ''; position: absolute;
-  width: 16px; height: 16px;
-  opacity: 0; z-index: 3;
-  transition: opacity .35s var(--ease-quiet);
-}
-.gallery-item::before {
-  top: 4px; left: 4px;
-  border-top: 1px solid var(--highlight);
-  border-left: 1px solid var(--highlight);
-}
-.gallery-item::after {
-  bottom: 4px; right: 4px;
-  border-bottom: 1px solid var(--highlight);
-  border-right: 1px solid var(--highlight);
-}
-.gallery-item:hover::before,
-.gallery-item:hover::after { opacity: 1; }
-
-.gallery-item .img-wrap {
-  aspect-ratio: 4 / 5; overflow: hidden; background: var(--bg);
-}
-.gallery-item .img-wrap img {
-  width: 100%; height: 100%; object-fit: cover;
-  filter: grayscale(0.25) brightness(0.85) contrast(1.05);
-  transition: filter .5s var(--ease-quiet), transform .8s var(--ease-quiet);
-}
-.gallery-item:hover .img-wrap img {
-  filter: grayscale(0) brightness(1) contrast(1.05);
-  transform: scale(1.03);
-}
-.gallery-item .caption {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 1rem 0.5rem 0.5rem;
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--text-soft);
-}
-.gallery-item .caption .num { color: var(--text-mute); }
-
-@media (max-width: 768px) {
-  .gallery { padding: 6rem 1.5rem; }
-  .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .gallery-head .meta { text-align: left; }
-}
-
-.stats {
-  padding: 8rem 2rem;
-  max-width: 1400px; margin: 0 auto;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-}
-.stats-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
-}
-.stat { position: relative; padding-top: 2rem; }
-.stat::before {
-  content: ''; position: absolute; top: 0; left: 0;
-  width: 28px; height: 2px; background: var(--highlight);
-  box-shadow: 0 0 10px var(--highlight-soft);
-}
-.stat-num {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1;
-  letter-spacing: -0.035em; margin-bottom: 1rem;
-}
-.stat-num .unit {
-  font-size: 0.38em; color: var(--text-soft); margin-left: 0.25em;
-  letter-spacing: 0;
-}
-.stat-label {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--text-soft); line-height: 1.7;
-}
-
-@media (max-width: 768px) {
-  .stats { padding: 5rem 1.5rem; }
-  .stats-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-}
-
-.capabilities {
-  padding: 8rem 2rem;
-  max-width: 1400px; margin: 0 auto;
-}
-.capabilities-grid {
-  display: grid; grid-template-columns: 1fr 2fr;
-  gap: 5rem; align-items: start;
-}
-.capabilities-list {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 0;
-}
-.cap-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid var(--line);
-  gap: 1rem;
-  transition: padding-left .3s var(--ease-quiet);
-}
-.cap-row:hover { padding-left: 0.5rem; }
-.cap-row:nth-child(odd) { padding-right: 1.5rem; }
-.cap-row .key {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--text-soft);
-}
-.cap-row .val {
-  font-family: 'Montserrat', sans-serif; font-weight: 800;
-  font-size: 1.05rem; letter-spacing: -0.01em;
-}
-
-@media (max-width: 768px) {
-  .capabilities { padding: 5rem 1.5rem; }
-  .capabilities-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .capabilities-list { grid-template-columns: 1fr; }
-  .cap-row:nth-child(odd) { padding-right: 0; }
-}
-
-.process {
-  padding: 10rem 2rem;
-  max-width: 1400px; margin: 0 auto;
-}
-.process-head { margin-bottom: 4rem; max-width: 700px; }
-.process-head h2 {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: clamp(2rem, 4.2vw, 3.5rem); line-height: 0.95;
-  letter-spacing: -0.025em; margin-top: 1.5rem;
-}
-.process-head h2 .accent { color: var(--highlight); }
-.process-head p {
-  font-size: 1rem; color: var(--text-soft);
-  margin-top: 1.5rem; line-height: 1.6;
-}
-.process-list {
-  display: flex; flex-direction: column;
-  border-top: 1px solid var(--line);
-}
-.process-step {
-  display: grid; grid-template-columns: 80px 1fr 2fr 120px;
-  gap: 2rem; padding: 2.5rem 0;
-  border-bottom: 1px solid var(--line);
-  align-items: center;
-  transition: background .4s var(--ease-quiet);
-  position: relative;
-}
-.process-step::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-  width: 0; background: var(--highlight);
-  transition: width .4s var(--ease-quiet);
-}
-.process-step:hover { background: rgba(255,122,26,0.03); }
-.process-step:hover::before { width: 3px; }
-.process-step:hover .step-num { color: var(--highlight); }
-.step-num {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: 1.4rem; color: var(--text-mute);
-  transition: color .4s var(--ease-quiet);
-  padding-left: 1rem;
-}
-.step-name {
-  font-family: 'Montserrat', sans-serif; font-weight: 800;
-  font-size: 1.15rem; letter-spacing: -0.01em; line-height: 1.1;
-}
-.step-desc {
-  font-size: 0.92rem; line-height: 1.6; color: var(--text-soft);
-}
-.step-meta {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.66rem;
-  letter-spacing: 0.12em; color: var(--text-mute);
-  text-align: right; line-height: 1.6;
-}
-
-@media (max-width: 900px) {
-  .process { padding: 6rem 1.5rem; }
-  .process-step { grid-template-columns: 50px 1fr; gap: 1rem; padding: 2rem 0; }
-  .step-num { padding-left: 0; font-size: 1.1rem; }
-  .step-name { font-size: 1rem; }
-  .step-desc, .step-meta { grid-column: 1 / -1; }
-  .step-meta { text-align: left; }
-}
-
-.quote {
-  padding: 8rem 2rem;
-  max-width: 1100px; margin: 0 auto;
-  text-align: center;
-}
-.quote-mark {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: 4.5rem; line-height: 1; color: var(--highlight);
-  margin-bottom: 1.5rem;
-}
-.quote-text {
-  font-family: 'Montserrat', sans-serif; font-weight: 800;
-  font-size: clamp(1.5rem, 3vw, 2.3rem); line-height: 1.25;
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 6rem; align-items: center;
+}
+.manifesto-text h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem); line-height: 1.2; font-weight: 500;
   letter-spacing: -0.02em; margin-bottom: 2rem;
 }
-.quote-attr {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--text-soft);
+.manifesto-text h2 strong { font-weight: 700; color: var(--accent); }
+.manifesto-text p { font-size: 1.05rem; color: var(--text-soft); margin-bottom: 1.5rem; }
+
+.manifesto-img-wrap { position: relative; }
+.manifesto-img { height: 550px; overflow: hidden; position: relative; z-index: 2; }
+.manifesto-img img { width: 100%; height: 100%; object-fit: cover; }
+.manifesto-img-wrap::before {
+  content: ''; position: absolute;
+  bottom: -30px; right: -30px; width: 100%; height: 100%;
+  border: 2px solid var(--accent); z-index: 1; pointer-events: none;
+}
+.manifesto-img-wrap::after {
+  content: ''; position: absolute;
+  top: -30px; left: -30px; width: 80px; height: 80px;
+  background: var(--accent); z-index: 3; pointer-events: none;
 }
 
-.contact {
-  padding: 12rem 2rem 8rem;
-  max-width: 1400px; margin: 0 auto;
-  text-align: center;
+/* SERVICIOS */
+.services { padding: 8rem 3rem; background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.services-header { max-width: 1200px; margin: 0 auto 4rem; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; flex-wrap: wrap; }
+.services-header h3 {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700; letter-spacing: -0.03em; line-height: 1;
 }
-.contact h2 {
-  font-family: 'Montserrat', sans-serif; font-weight: 900;
-  font-size: clamp(2.5rem, 7vw, 5.5rem); line-height: 0.92;
-  letter-spacing: -0.035em; margin-top: 2rem; margin-bottom: 3rem;
-}
-.contact h2 .accent { color: var(--highlight); }
-.contact-cta {
-  display: inline-flex; align-items: center; gap: 0.75rem;
-  padding: 1.25rem 2rem; border: 1px solid var(--text);
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.76rem;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  transition: background .4s var(--ease-quiet), border-color .4s var(--ease-quiet), color .4s var(--ease-quiet);
-  background: transparent; color: var(--text);
-}
-.contact-cta:hover { background: var(--highlight); border-color: var(--highlight); color: #fff; }
-.contact-info {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 3rem; margin-top: 5rem; text-align: left;
-  padding-top: 4rem; border-top: 1px solid var(--line);
-}
-.contact-block .label-sm {
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--text-mute); margin-bottom: 1rem;
-}
-.contact-block .value {
-  font-size: 1rem; color: var(--text); line-height: 1.7;
-}
-.contact-block .value a {
-  border-bottom: 1px solid var(--line);
-  transition: border-color .3s var(--ease-quiet), color .3s var(--ease-quiet);
-}
-.contact-block .value a:hover { border-color: var(--highlight); color: var(--highlight); }
+.services-header p { max-width: 300px; color: var(--text-soft); }
 
-@media (max-width: 768px) {
-  .contact { padding: 7rem 1.5rem 5rem; }
-  .contact-info { grid-template-columns: 1fr; gap: 2rem; padding-top: 3rem; }
+.services-wrapper {
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem;
 }
+.services-list { display: flex; flex-direction: column; }
+.service-item {
+  display: grid; grid-template-columns: 40px 1fr 30px; align-items: center; gap: 1.5rem;
+  padding: 1.5rem 0; border-top: 1px solid var(--line);
+  cursor: pointer; transition: all .3s ease;
+}
+.service-item:last-child { border-bottom: 1px solid var(--line); }
+.service-item:hover { padding-left: 1rem; }
+.service-num { font-family: 'Space Grotesk'; font-size: 0.9rem; font-weight: 600; color: var(--text-mute); transition: color .3s; }
+.service-name {
+  font-family: 'Space Grotesk'; font-size: clamp(1.2rem, 2vw, 1.8rem); font-weight: 500;
+  transition: color .3s ease;
+}
+.service-arrow { font-size: 1.2rem; text-align: right; color: var(--text-mute); transition: transform .3s ease, color .3s ease; }
 
-.footer {
-  padding: 3rem 2rem 2rem;
-  border-top: 1px solid var(--line);
-  max-width: 1400px; margin: 0 auto;
-  position: relative; z-index: 2;
-}
-.footer-grid {
-  display: flex; justify-content: space-between; align-items: center;
-  flex-wrap: wrap; gap: 1rem;
-  font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
-  letter-spacing: 0.12em; color: var(--text-mute);
-}
-.footer-grid .brand { color: var(--text); font-weight: 500; }
-.footer-grid .brand span { color: var(--highlight); }
-.footer-logo {
-  height: 48px;
-  width: auto;
-}
+.service-item.is-active .service-num,
+.service-item.is-active .service-name,
+.service-item.is-active .service-arrow { color: var(--accent); }
+.service-item.is-active { padding-left: 1.5rem; }
+.service-item.is-active .service-arrow { transform: translateX(5px); }
 
-.reveal {
-  opacity: 0; transform: translateY(40px);
-  transition: opacity .9s var(--ease-quiet), transform .9s var(--ease-quiet);
+.services-preview {
+  position: sticky; top: 100px; height: 500px; overflow: hidden;
+  background: #000; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15);
 }
-.reveal.is-in { opacity: 1; transform: none; }
-.reveal-delay-1 { transition-delay: 0.12s; }
-.reveal-delay-2 { transition-delay: 0.24s; }
-.reveal-delay-3 { transition-delay: 0.36s; }
+.services-preview img {
+  width: 100%; height: 100%; object-fit: cover;
+  opacity: 0; transition: opacity .5s ease, transform 1s ease; transform: scale(1.05);
+  position: absolute; inset: 0;
+}
+.services-preview img.active { opacity: 1; transform: scale(1); }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
+/* SECTORES */
+.sectors { padding: 6rem 3rem; background: var(--bg); }
+.sectors-inner { max-width: 1200px; margin: 0 auto; text-align: center; }
+.sectors h3 {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 500; letter-spacing: -0.02em; margin-bottom: 3rem; color: var(--text);
+}
+.sectors-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem 3rem; }
+.sector-tag {
+  font-family: 'Space Grotesk'; font-size: 1.1rem; font-weight: 600; color: var(--text-mute);
+  transition: color .3s ease;
+}
+.sector-tag:hover { color: var(--accent); }
+
+/* PROYECTOS */
+.projects { padding: 8rem 3rem; background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.projects-intro { max-width: 1200px; margin: 0 auto 6rem; }
+.projects-intro h3 {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 700; letter-spacing: -0.03em; margin-bottom: 1rem; color: var(--text);
+}
+.projects-intro p { color: var(--text-soft); max-width: 500px; }
+
+.projects-container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 8rem; }
+
+.project-row { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.project-row.reverse .project-visual { order: 2; }
+
+.project-visual { position: relative; }
+.project-row .project-visual { padding: 0 30px 30px 0; }
+.project-row.reverse .project-visual { padding: 30px 0 0 30px; }
+
+.project-img-box { 
+  position: relative; height: 450px; overflow: hidden; z-index: 2;
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1); 
+}
+.project-img-box img { 
+  width: 100%; height: 100%; object-fit: cover; 
+  transition: transform .8s cubic-bezier(.22,1,.36,1); 
+}
+.project-row:hover .project-img-box img { transform: scale(1.05); }
+
+.project-visual::before {
+  content: ''; position: absolute;
+  border: 2px solid var(--accent); z-index: 1; pointer-events: none;
+}
+.project-row .project-visual::before { top: 30px; left: 30px; right: 0; bottom: 0; }
+.project-row.reverse .project-visual::before { top: 0; left: 0; right: 30px; bottom: 30px; }
+
+.project-text { padding: 1rem 0; }
+.project-meta { font-size: 0.8rem; font-weight: 600; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem; }
+.project-text h4 { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 3vw, 2.5rem); font-weight: 700; margin-bottom: 1rem; line-height: 1.1; color: var(--text); }
+.project-text p { font-size: 1.05rem; color: var(--text-soft); margin-bottom: 0; max-width: 400px; }
+
+/* STATS */
+.stats { background: var(--text); color: #fff; padding: 6rem 3rem; }
+.stats-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+.stat-item { border-top: 1px solid rgba(255,255,255,0.2); padding-top: 1.5rem; }
+.stat-num { font-family: 'Space Grotesk'; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 700; margin-bottom: 0.5rem; }
+.stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.6); }
+
+/* CONTACTO Y FORMULARIO */
+.contact { padding: 8rem 3rem; background: var(--bg); }
+.contact-inner { 
+  max-width: 1200px; margin: 0 auto; 
+  display: grid; grid-template-columns: 1fr 1.2fr; gap: 6rem; align-items: start; 
+}
+.contact-title {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 700; letter-spacing: -0.03em; line-height: 1; margin-bottom: 1.5rem;
+}
+.contact-title span { color: var(--accent); }
+.contact-details { display: flex; flex-direction: column; gap: 2rem; margin-top: 3rem; }
+.detail-block strong { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-mute); margin-bottom: 0.5rem; }
+.detail-block a, .detail-block p { font-size: 1.1rem; color: var(--text); transition: color .3s; }
+.detail-block a:hover { color: var(--accent); }
+
+.contact-form {
+  background: #fff; padding: 3rem; border: 1px solid var(--line);
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05);
+}
+.form-group { margin-bottom: 1.5rem; }
+.form-group label {
+  display: block; font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--text-soft); margin-bottom: 0.5rem;
+}
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%; padding: 0.8rem 1rem; font-family: 'Inter', sans-serif;
+  font-size: 1rem; color: var(--text); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 4px; transition: border-color .3s ease;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+  outline: none; border-color: var(--accent); background: #fff;
+}
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-submit {
+  width: 100%; padding: 1.1rem; background: var(--accent); color: #fff;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.9rem;
+  cursor: pointer; transition: background .3s ease; border-radius: 4px;
+}
+.form-submit:hover { background: var(--accent-dark); }
+
+/* FOOTER */
+.footer { padding: 2rem 3rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-mute); background: #fff; }
+.footer-logo { height: 28px; filter: grayscale(100%) opacity(0.5); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* CELULAR */
+@media (max-width: 900px) {
+  .hero { padding: 6rem 1.5rem 3rem 1.5rem; }
+  
+  .clients { padding: 3rem 1.5rem; }
+  .clients-grid { grid-template-columns: repeat(2, 1fr); gap: 2.5rem; }
+
+  .manifesto { padding: 5rem 1.5rem; }
+  .manifesto-grid { grid-template-columns: 1fr; gap: 4rem; }
+  .manifesto-img { height: 350px; }
+  .manifesto-img-wrap::before { bottom: -15px; right: -15px; }
+  .manifesto-img-wrap::after { top: -15px; left: -15px; width: 50px; height: 50px; }
+
+  .services { padding: 5rem 1.5rem; }
+  .services-wrapper { grid-template-columns: 1fr; gap: 2rem; }
+  .services-preview { display: block !important; position: relative; top: 0; height: 280px; order: -1; margin-bottom: 1.5rem; }
+
+  .sectors { padding: 4rem 1.5rem; }
+  .sectors-list { gap: 1rem 2rem; }
+
+  .projects { padding: 5rem 1.5rem; }
+  .projects-intro { margin-bottom: 3rem; }
+  .projects-container { gap: 4rem; }
+  .project-row { grid-template-columns: 1fr; gap: 2.5rem; }
+  .project-row.reverse .project-visual { order: 0; }
+  .project-img-box { height: 300px; }
+  .project-row .project-visual, .project-row.reverse .project-visual { padding: 0 15px 15px 0; }
+  .project-row .project-visual::before, .project-row.reverse .project-visual::before {
+    top: 15px; left: 15px; right: 0; bottom: 0;
   }
-  .reveal { opacity: 1; transform: none; }
-  .hero-eyebrow, .hero-title, .hero-sub, .hero-cta {
-    opacity: 1 !important; transform: none !important;
-  }
-  .marquee-track { animation: none; }
+
+  .stats { padding: 4rem 1.5rem; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+
+  .contact { padding: 5rem 1.5rem; }
+  .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .contact-details { margin-top: 0; }
+  .contact-form { padding: 2rem 1.5rem; }
+
+  .footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
 }
 </style>
 </head>
 <body>
 
-<div class="bg-glow"></div>
-<div class="bg-grain"></div>
-<div class="scroll-progress" id="scroll-progress"></div>
-
-<nav class="nav" id="nav">
-  <a href="#" class="nav-brand">
-    <img src="https://i.imgur.com/OWobKea.jpeg" alt="CSAN Ingeniería" class="nav-logo">
-  </a>
-  
+<nav class="nav">
+  <a href="#"><img src="https://i.imgur.com/OWobKea.jpeg" alt="CSAN" class="nav-logo"></a>
   <div class="nav-links">
-    <a href="#manifiesto">Manifiesto</a>
+    <a href="#manifiesto">Empresa</a>
     <a href="#servicios">Servicios</a>
     <a href="#proyectos">Proyectos</a>
-    <a href="#proceso">Proceso</a>
-    <a href="#contacto">Contacto</a>
-  </div>
-  <div class="nav-status">
-    <span class="dot"></span>
-    <span>OPERATIVO · 24/7</span>
+    <a href="#contacto" class="nav-cta">Contacto</a>
   </div>
 </nav>
 
+<!-- HERO CON VIDEO (Sin imagen poster para evitar parpadeos) -->
 <section class="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow" id="hero-eyebrow">
-      <span class="pulse"></span>
-      <span>INGENIERÍA ELÉCTRICA · DESDE 2010</span>
-    </div>
-    <h1 class="hero-title" id="hero-title">Energía que <span class="accent">no falla.</span></h1>
-    <p class="hero-sub" id="hero-sub">CSAN Ingeniería diseña, instala y mantiene sistemas eléctricos industriales y comerciales con la precisión de un ritual — cada conexión revisada, cada tablero trazado, cada retorno documentado.</p>
-    <div class="hero-cta" id="hero-cta">
-      <a href="#servicios" class="btn btn-primary">Ver servicios <span class="btn-arrow">→</span></a>
-      <a href="#contacto" class="btn">Solicitar diagnóstico</a>
-    </div>
-  </div>
-  <div class="hero-edge">
-    <div><span class="v">CSAN</span> / BUENOS AIRES · AR</div>
-    <div>ENRE · AEA · IRAM</div>
-  </div>
-  <div class="hero-meta">
-    FUNDADOR: CARLOS SANTA CRUZ<br>
-    12 TÉCNICOS · 3 INGENIEROS<br>
-    CABA + GRAN BUENOS AIRES
+  <video class="hero-bg-video" autoplay muted loop playsinline>
+    <source src="https://i.imgur.com/e00L69u.mp4" type="video/mp4">
+  </video>
+  <div class="hero-bg-overlay"></div>
+  
+  <div class="hero-content">
+    <div class="hero-eyebrow reveal"><span></span>INGENIERÍA ELÉCTRICA · DESDE 2010</div>
+    <h1 class="hero-title reveal">Energía que <em>no falla.</em><br>Proyectos que perduran.</h1>
+    <p class="hero-sub reveal">Diseñamos, instalamos y mantenimos sistemas eléctricos industriales y comerciales con precisión milimétrica. Cada conexión revisada, cada tablero trazado.</p>
+    <a href="#contacto" class="btn btn-primary reveal delay-1">Solicitar diagnóstico →</a>
   </div>
 </section>
 
-<div class="marquee">
-  <div class="marquee-track">
-    <div class="marquee-item">Instalaciones Eléctricas <span class="sep"></span> Mantenimiento Industrial <span class="sep"></span> Tableros y Automatización <span class="sep"></span> Corriente Crítica <span class="sep"></span> Paneles Solares <span class="sep"></span> Domótica <span class="sep"></span> Pruebas Eléctricas <span class="sep"></span> Cañerías <span class="sep"></span></div>
-    <div class="marquee-item">Instalaciones Eléctricas <span class="sep"></span> Mantenimiento Industrial <span class="sep"></span> Tableros y Automatización <span class="sep"></span> Corriente Crítica <span class="sep"></span> Paneles Solares <span class="sep"></span> Domótica <span class="sep"></span> Pruebas Eléctricas <span class="sep"></span> Cañerías <span class="sep"></span></div>
+<!-- CLIENTES CON LOGOS REALES -->
+<section class="clients">
+  <div class="clients-inner">
+    <p class="clients-title reveal">Confían en nuestra ingeniería</p>
+    <div class="clients-grid reveal delay-1">
+      <img src="https://i.imgur.com/wM22908.png" alt="Techint" class="client-img">
+      <img src="https://i.imgur.com/Wd5GfCD.png" alt="Pampa" class="client-img">
+      <img src="https://i.imgur.com/uNmuxsT.png" alt="Arcor" class="client-img">
+      <img src="https://i.imgur.com/yHXaS98.png" alt="Toyota" class="client-img">
+      <img src="https://i.imgur.com/Y6KiC7k.png" alt="Galicia" class="client-img">
+    </div>
   </div>
-</div>
+</section>
 
+<!-- MANIFIESTO -->
 <section class="manifesto" id="manifiesto">
   <div class="manifesto-grid">
-    <div>
-      <div class="opener reveal">
-        <span class="opener-rule"></span>
-        <span class="opener-label">/ 01 — Manifiesto</span>
-      </div>
+    <div class="manifesto-text">
+      <div class="hero-eyebrow reveal"><span></span>NUESTRA VISIÓN</div>
+      <h2 class="reveal">Tratamos la electricidad como un <strong>oficio</strong>, no como un trámite. Documentamos cada conexión porque lo que otros llaman mantenimiento, para nosotros es la memoria del sistema.</h2>
+      <p class="reveal">Una instalación mal ejecutada no siempre falla hoy. A veces espera meses, incluso años, hasta que el sistema se ve exigido. Por eso documentamos cada conexión, cada medida, cada corrección.</p>
+      <p class="reveal">Trabajamos con clientes que no toleran el corte. Donde la energía se detiene, el costo se mide en horas-hombre, en producto perdido, en reputación.</p>
     </div>
-    <div>
-      <h2 class="manifesto-title reveal">Tratamos la electricidad como <span class="accent">oficio</span>, no como trámite.</h2>
-      <div class="manifesto-body">
-        <p class="reveal reveal-delay-1">Una instalación eléctrica mal ejecutada no siempre falla hoy. A veces espera meses, incluso años, hasta que el sistema se ve exigido. <strong>Por eso documentamos cada conexión, cada medida, cada corrección.</strong> Lo que otros llaman "mantenimiento", para nosotros es la memoria del sistema.</p>
-        <p class="reveal reveal-delay-2">Trabajamos con clientes que no toleran el corte — hospitales, industrias, plantas de proceso, data centers, edificios institucionales. Donde la energía se detiene, el costo se mide en horas-hombre, en producto perdido, en reputación.</p>
-        <p class="reveal reveal-delay-3">Nuestra metodología combina ingeniería de detalle, ejecución con técnicos propios y protocolos de prueba que dejan registro. No improvisamos. No subcontratamos lo crítico. Cada proyecto entra al taller y sale con carpeta.</p>
+    <div class="manifesto-img-wrap reveal">
+      <div class="manifesto-img">
+        <img src="https://i.imgur.com/7CfkIuJ.jpeg" alt="Tablero Eléctrico" loading="lazy">
       </div>
     </div>
   </div>
 </section>
 
-<section id="cardstack">
-  <div class="cardstack-intro" id="servicios">
-    <div class="opener reveal">
-      <span class="opener-rule"></span>
-      <span class="opener-label">/ 02 — Servicios</span>
-    </div>
-    <h2 class="reveal reveal-delay-1">Nueve disciplinas bajo un <span class="accent">mismo estándar</span>.</h2>
-    <p class="reveal reveal-delay-2">Cada línea de servicio tiene su propio protocolo, su propio equipo responsable y su propia carpeta de entrega. Lo que no se documenta, no se hizo.</p>
+<!-- SERVICIOS -->
+<section class="services" id="servicios">
+  <div class="services-header">
+    <h3 class="reveal">Nueve disciplinas, un mismo estándar.</h3>
+    <p class="reveal">Hacé clic en cada servicio para visualizarlo.</p>
   </div>
-  <div id="cardstack-pin">
-
-    <div class="cardstack__card">
-      <div class="card-img">
-        <div class="card-img-label">SERVICIO 01</div>
-        <img src="https://i.imgur.com/x9TavpE.jpeg" alt="Mantenimiento eléctrico" loading="lazy">
+  <div class="services-wrapper">
+    <div class="services-list">
+      <div class="service-item is-active reveal" data-img="serv-1">
+        <div class="service-num">01</div>
+        <div class="service-name">Instalaciones y Mantenimiento</div>
+        <div class="service-arrow">→</div>
       </div>
-      <div class="card-content">
-        <div>
-          <div class="card-num"><span>01 / 09</span><span class="marker"></span></div>
-          <h3 class="card-title">Instalaciones y mantenimiento eléctrico</h3>
-          <p class="card-desc">Servicio integral para instalaciones existentes y nuevas. Diagnóstico de sitio, ejecución y seguimiento documentado bajo norma AEA. Cobertura continua con contratos de servicio.</p>
-          <div class="card-tags">
-            <span class="card-tag">Norma AEA</span><span class="card-tag">ENRE</span><span class="card-tag">IRAM</span><span class="card-tag">24/7</span>
-          </div>
-        </div>
-        <div class="card-footer"><span class="card-tag-line">Servicio continuo</span><span class="card-arrow">→</span></div>
+      <div class="service-item reveal" data-img="serv-2">
+        <div class="service-num">02</div>
+        <div class="service-name">Inst. Industrial y Comercial</div>
+        <div class="service-arrow">→</div>
       </div>
-    </div>
-
-    <div class="cardstack__card">
-      <div class="card-img">
-        <div class="card-img-label">SERVICIO 02</div>
-        <img src="https://i.imgur.com/BSzgjmg.jpeg" alt="Instalación industrial y comercial" loading="lazy">
+      <div class="service-item reveal" data-img="serv-3">
+        <div class="service-num">03</div>
+        <div class="service-name">Tableros y Automatización</div>
+        <div class="service-arrow">→</div>
       </div>
-      <div class="card-content">
-        <div>
-          <div class="card-num"><span>02 / 09</span><span class="marker"></span></div>
-          <h3 class="card-title">Instalación eléctrica industrial y comercial</h3>
-          <p class="card-desc">Proyectos llave en mano para plantas, galpones, edificios corporativos y retail. Cálculo de carga, canalizaciones, tableros generales y seccionales, puesta en servicio y certificación.</p>
-          <div class="card-tags">
-            <span class="card-tag">Baja tensión</span><span class="card-tag">Media tensión</span><span class="card-tag">Llave en mano</span>
-          </div>
-        </div>
-        <div class="card-footer"><span class="card-tag-line">Proyectos turnkey</span><span class="card-arrow">→</span></div>
+      <div class="service-item reveal" data-img="serv-4">
+        <div class="service-num">04</div>
+        <div class="service-name">Mantenimiento Preventivo</div>
+        <div class="service-arrow">→</div>
       </div>
-    </div>
-
-    <div class="cardstack__card">
-      <div class="card-img">
-        <div class="card-img-label">SERVICIO 03</div>
-        <img src="https://i.imgur.com/B1h5wkQ.jpeg" alt="Tableros y automatización" loading="lazy">
+      <div class="service-item reveal" data-img="serv-5">
+        <div class="service-num">05</div>
+        <div class="service-name">Corriente Crítica y UPS</div>
+        <div class="service-arrow">→</div>
       </div>
-      <div class="card-content">
-        <div>
-          <div class="card-num"><span>03 / 09</span><span class="marker"></span></div>
-          <h3 class="card-title">Tableros y automatización</h3>
-          <p class="card-desc">Diseño y fabricación de tableros de control, comando y fuerza. Integración con PLC, HMI y SCADA. Automatización de procesos productivos y supervisión remota de variables eléctricas.</p>
-          <div class="card-tags">
-            <span class="card-tag">PLC</span><span class="card-tag">SCADA</span><span class="card-tag">HMI</span><span class="card-tag">Modbus TCP</span>
-          </div>
-        </div>
-        <div class="card-footer"><span class="card-tag-line">Taller propio</span><span class="card-arrow">→</span></div>
+      <div class="service-item reveal" data-img="serv-6">
+        <div class="service-num">06</div>
+        <div class="service-name">Paneles Solares</div>
+        <div class="service-arrow">→</div>
+      </div>
+      <div class="service-item reveal" data-img="serv-7">
+        <div class="service-num">07</div>
+        <div class="service-name">Domótica e Inmótica</div>
+        <div class="service-arrow">→</div>
+      </div>
+      <div class="service-item reveal" data-img="serv-8">
+        <div class="service-num">08</div>
+        <div class="service-name">Pruebas Eléctricas</div>
+        <div class="service-arrow">→</div>
+      </div>
+      <div class="service-item reveal" data-img="serv-9">
+        <div class="service-num">09</div>
+        <div class="service-name">Cañerías Eléctricas</div>
+        <div class="service-arrow">→</div>
       </div>
     </div>
-
-    <div class="cardstack__card">
-      <div class="card-img">
-        <div class="card-img-label">SERVICIO 04</div>
-        <img src="https://i.imgur.com/XoLeinG.jpeg" alt="Mantenimiento preventivo y correctivo" loading="lazy">
-      </div>
-      <div class="card-content">
-        <div>
-          <div class="card-num"><span>04 / 09</span><span class="marker"></span></div>
-          <h3 class="card-title">Mantenimiento preventivo y correctivo</h3>
-          <p class="card-desc">Programas calendarizados de inspección, termografía, aprietes, limpieza y reemplazo de componentes. Atención de fallas con respuesta menor a 4 horas en clientes con contrato.</p>
-          <div class="card-tags">
-            <span class="card-tag">Termografía</span><span class="card-tag">Plan calendarizado</span><span class="card-tag">SLA 4h</span>
-          </div>
-        </div>
-        <div class="card-footer"><span class="card-tag-line">Contratos anuales</span><span class="card-arrow">→</span></div>
-      </div>
+    
+    <div class="services-preview reveal">
+      <img id="serv-1" src="https://i.imgur.com/x9TavpE.jpeg" alt="Mantenimiento" class="active">
+      <img id="serv-2" src="https://i.imgur.com/BSzgjmg.jpeg" alt="Industrial">
+      <img id="serv-3" src="https://i.imgur.com/B1h5wkQ.jpeg" alt="Tableros">
+      <img id="serv-4" src="https://i.imgur.com/XoLeinG.jpeg" alt="Preventivo">
+      <img id="serv-5" src="https://i.imgur.com/7CfkIuJ.jpeg" alt="UPS">
+      <img id="serv-6" src="https://i.imgur.com/YeiYjUa.jpeg" alt="Solares">
+      <img id="serv-7" src="https://i.imgur.com/sREYKKf.jpeg" alt="Domótica">
+      <img id="serv-8" src="https://i.imgur.com/B1h5wkQ.jpeg" alt="Pruebas">
+      <img id="serv-9" src="https://i.imgur.com/BSzgjmg.jpeg" alt="Cañerías">
     </div>
-
-    <div class="cardstack__card">
-      <div class="card-img">
-        <div class="card-img-label">SERVICIO 05</div>
-        <img src="https://i.imgur.com/7CfkIuJ.jpeg" alt="Sistema de respaldo y corriente crítica" loading="lazy">
-      </div>
-      <div class="card-content">
-        <div>
-          <div class="card-num"><span>05 / 09</span><span class="marker"></span></div>
-          <h3 class="card-title">Sistema de respaldo y corriente crítica</h3>
-          <p class="card-desc">Diseño e instalación de UPS, grupos electrógenos, sistemas DC para telecomunicaciones y salas críticas. Conmutación transparente, autonomía calculada y pruebas de carga reales.</p>
-          <div class="card-tags">
-            <span class="card-tag">UPS</span><span class="card-tag">Grupos electrógenos</span><span class="card-tag">DC Power</span><span class="card-tag">Tier III</span>
-          </div>
-        </div>
-        <div class="card-footer"><span class="card-tag-line">Misión crítica</span><span class="card-arrow">→</span></div>
-      </div>
-    </div>
-
-    <div class="cardstack__card">
-      <div class="card-img">
-        <div class="card-img-label">SERVICIO 06</div>
-        <img src="https://i.imgur.com/YeiYjUa.jpeg" alt="Instalación de paneles solares" loading="lazy">
-      </div>
-      <div class="card-content">
-        <div>
-          <div class="card-num"><span>06 / 09</span><span class="marker"></span></div>
-          <h3 class="card-title">Instalación de paneles solares</h3>
-          <p class="card-desc">Sistemas fotovoltaicos on-grid y off-grid para industrias, comercios y viviendas. Diseño con estudio de sombreado, montaje estructural certificado y tramitación ante distribuidora.</p>
-          <div class="card-tags">
-            <span class="card-tag">FV On-grid</span><span class="card-tag">Off-grid</span><span class="card-tag">Netmetering</span><span class="card-tag">Estructura cert.</span>
-          </div>
-        </div>
-        <div class="card-footer"><span class="card-tag-line">Energía distribuida</span><span class="card-arrow">→</span></div>
-      </div>
-    </div>
-
-    <div class="cardstack__card">
-      <div class="card-img">
-        <div class="card-img-label">SERVICIO 07</div>
-        <img src="https://i.imgur.com/sREYKKf.jpeg" alt="Domótica e inmótica" loading="lazy">
-      </div>
-      <div class="card-content">
-        <div>
-          <div class="card-num"><span>07 / 09</span><span class="marker"></span></div>
-          <h3 class="card-title">Domótica e inmótica</h3>
-          <p class="card-desc">Automatización de viviendas y edificios. Control de iluminación, clima, accesos y seguridad sobre protocolos KNX y Modbus. Integración con plataformas de gestión inmobiliaria.</p>
-          <div class="card-tags">
-            <span class="card-tag">KNX</span><span class="card-tag">Modbus</span><span class="card-tag">BMS</span><span class="card-tag">App móvil</span>
-          </div>
-        </div>
-        <div class="card-footer"><span class="card-tag-line">Edificios inteligentes</span><span class="card-arrow">→</span></div>
-      </div>
-    </div>
-
-    <div class="cardstack__card">
-      <div class="card-img">
-        <div class="card-img-label">SERVICIO 08</div>
-        <img src="https://i.imgur.com/B1h5wkQ.jpeg" alt="Pruebas eléctricas" loading="lazy">
-      </div>
-      <div class="card-content">
-        <div>
-          <div class="card-num"><span>08 / 09</span><span class="marker"></span></div>
-          <h3 class="card-title">Pruebas eléctricas</h3>
-          <p class="card-desc">Ensayos de rigidez dieléctrica, resistencia de aislación, resistencia de puesta a tierra, continuidad de conductores de protección y termografía infrarroja. Informe técnico firmado.</p>
-          <div class="card-tags">
-            <span class="card-tag">Rigidez dieléctrica</span><span class="card-tag">Aislación</span><span class="card-tag">PAT</span><span class="card-tag">Termografía IR</span>
-          </div>
-        </div>
-        <div class="card-footer"><span class="card-tag-line">Informes firmados</span><span class="card-arrow">→</span></div>
-      </div>
-    </div>
-
-    <div class="cardstack__card">
-      <div class="card-img">
-        <div class="card-img-label">SERVICIO 09</div>
-        <img src="https://i.imgur.com/BSzgjmg.jpeg" alt="Cañerías eléctricas" loading="lazy">
-      </div>
-      <div class="card-content">
-        <div>
-          <div class="card-num"><span>09 / 09</span><span class="marker"></span></div>
-          <h3 class="card-title">Cañerías eléctricas</h3>
-          <p class="card-desc">Tendido de canalizaciones en PVC, metálicas y conduit flexible. Curvado, soportería y empaque según norma. Trabajo coordinado con obras civiles para minimizar retrabajos.</p>
-          <div class="card-tags">
-            <span class="card-tag">PVC</span><span class="card-tag">Conduit metálico</span><span class="card-tag">Flexible</span><span class="card-tag">Soportería norma</span>
-          </div>
-        </div>
-        <div class="card-footer"><span class="card-tag-line">Canalización completa</span><span class="card-arrow">→</span></div>
-      </div>
-    </div>
-
   </div>
 </section>
 
-<section class="gallery" id="proyectos">
-  <div class="opener reveal">
-    <span class="opener-rule"></span>
-    <span class="opener-label">/ 03 — Proyectos</span>
-  </div>
-  <div class="gallery-head">
-    <h2 class="reveal reveal-delay-1">Trabajo <span class="accent">documentado</span>, no portfolio decorativo.</h2>
-    <div class="meta reveal reveal-delay-2">SELECCIÓN 2022—2024<br>Galería de proyectos reales</div>
-  </div>
-  <div class="gallery-grid">
-    <a href="#" class="gallery-item reveal">
-      <div class="img-wrap"><img src="https://i.imgur.com/x9TavpE.jpeg" alt="Proyecto Subestación" loading="lazy"></div>
-      <div class="caption"><span>SUBESTACIÓN PLANTA NORTE</span><span class="num">001 / 24</span></div>
-    </a>
-    <a href="#" class="gallery-item reveal reveal-delay-1">
-      <div class="img-wrap"><img src="https://i.imgur.com/B1h5wkQ.jpeg" alt="Tablero seccional industria" loading="lazy"></div>
-      <div class="caption"><span>TABLERO SECCIONAL INDUSTRIA</span><span class="num">002 / 23</span></div>
-    </a>
-    <a href="#" class="gallery-item reveal reveal-delay-2">
-      <div class="img-wrap"><img src="https://i.imgur.com/7CfkIuJ.jpeg" alt="Datacenter BT-A" loading="lazy"></div>
-      <div class="caption"><span>DATACENTER BT-A</span><span class="num">003 / 24</span></div>
-    </a>
-    <a href="#" class="gallery-item reveal">
-      <div class="img-wrap"><img src="https://i.imgur.com/YeiYjUa.jpeg" alt="Solar rooftop 400kWp" loading="lazy"></div>
-      <div class="caption"><span>SOLAR ROOFTOP 400KWP</span><span class="num">004 / 23</span></div>
-    </a>
-    <a href="#" class="gallery-item reveal reveal-delay-1">
-      <div class="img-wrap"><img src="https://i.imgur.com/XoLeinG.jpeg" alt="Hospital corriente crítica" loading="lazy"></div>
-      <div class="caption"><span>HOSPITAL · CORRIENTE CRÍTICA</span><span class="num">005 / 22</span></div>
-    </a>
-    <a href="#" class="gallery-item reveal reveal-delay-2">
-      <div class="img-wrap"><img src="https://i.imgur.com/sREYKKf.jpeg" alt="Edificio corporativo" loading="lazy"></div>
-      <div class="caption"><span>EDIFICIO CORPORATIVO</span><span class="num">006 / 24</span></div>
-    </a>
+<!-- SECTORES -->
+<section class="sectors">
+  <div class="sectors-inner">
+    <h3 class="reveal">Acompañamos a la industria que no tolera el corte.</h3>
+    <div class="sectors-list reveal delay-1">
+      <span class="sector-tag">Hospitales</span>
+      <span class="sector-tag">Data Centers</span>
+      <span class="sector-tag">Plantas de Proceso</span>
+      <span class="sector-tag">Edificios Corporativos</span>
+      <span class="sector-tag">Minería</span>
+      <span class="sector-tag">Telecomunicaciones</span>
+    </div>
   </div>
 </section>
 
+<!-- PROYECTOS -->
+<section class="projects" id="proyectos">
+  <div class="projects-intro">
+    <div class="hero-eyebrow reveal"><span></span>EXPERIENCIA</div>
+    <h3 class="reveal">Proyectos que sostienen la operación.</h3>
+    <p class="reveal">Una selección de obras donde la precisión y el respaldo fueron innegociables.</p>
+  </div>
+
+  <div class="projects-container">
+    <div class="project-row reveal">
+      <div class="project-visual">
+        <div class="project-img-box">
+          <img src="https://i.imgur.com/B1h5wkQ.jpeg" alt="Subestación" loading="lazy">
+        </div>
+      </div>
+      <div class="project-text">
+        <div class="project-meta">01 / Industria · 2024</div>
+        <h4>Subestación Planta Norte</h4>
+        <p>Coordinación de obra eléctrica sin detener operaciones, garantiendo autonomía y respaldo ante cortes.</p>
+      </div>
+    </div>
+
+    <div class="project-row reverse reveal">
+      <div class="project-visual">
+        <div class="project-img-box">
+          <img src="https://i.imgur.com/YeiYjUa.jpeg" alt="Paneles Solares" loading="lazy">
+        </div>
+      </div>
+      <div class="project-text">
+        <div class="project-meta">02 / Energía · 2023</div>
+        <h4>Solar Rooftop 400kWp</h4>
+        <p>Sistema fotovoltaico on-grid para techo industrial. Montaje estructural certificado y tramitación.</p>
+      </div>
+    </div>
+    
+    <div class="project-row reveal">
+      <div class="project-visual">
+        <div class="project-img-box">
+          <img src="https://i.imgur.com/sREYKKf.jpeg" alt="Automatización" loading="lazy">
+        </div>
+      </div>
+      <div class="project-text">
+        <div class="project-meta">03 / Comercial · 2024</div>
+        <h4>Automatización de Tableros</h4>
+        <p>Supervisión remota de variables eléctricas vía SCADA, reduciendo tiempos de parada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
 <section class="stats">
   <div class="stats-grid">
-    <div class="stat reveal">
-      <div class="stat-num">14<span class="unit">años</span></div>
-      <div class="stat-label">Operación continua<br>desde 2010</div>
-    </div>
-    <div class="stat reveal reveal-delay-1">
-      <div class="stat-num">320<span class="unit">+</span></div>
-      <div class="stat-label">Proyectos completados<br>industria y comercio</div>
-    </div>
-    <div class="stat reveal reveal-delay-2">
-      <div class="stat-num">1.2<span class="unit">MW</span></div>
-      <div class="stat-label">Capacidad solar<br>fotovoltaica instalada</div>
-    </div>
-    <div class="stat reveal reveal-delay-3">
-      <div class="stat-num">24<span class="unit">/7</span></div>
-      <div class="stat-label">Disponibilidad crítica<br>con contrato de servicio</div>
-    </div>
+    <div class="stat-item reveal"><div class="stat-num">14</div><div class="stat-label">Años de operación</div></div>
+    <div class="stat-item reveal delay-1"><div class="stat-num">320+</div><div class="stat-label">Proyectos completados</div></div>
+    <div class="stat-item reveal delay-2"><div class="stat-num">1.2 MW</div><div class="stat-label">Capacidad solar instalada</div></div>
+    <div class="stat-item reveal delay-3"><div class="stat-num">24/7</div><div class="stat-label">Disponibilidad crítica</div></div>
   </div>
 </section>
 
-<section class="capabilities">
-  <div class="opener reveal">
-    <span class="opener-rule"></span>
-    <span class="opener-label">/ 04 — Capacidades</span>
-  </div>
-  <div class="capabilities-grid">
-    <div class="reveal reveal-delay-1">
-      <h2 class="manifesto-title">Infraestructura <span class="accent">y certificaciones.</span></h2>
-      <p style="color: var(--text-soft); margin-top: 1.5rem; line-height: 1.7;">El equipo y las certificaciones definen qué trabajos podemos asumir. Aquí los datos verificables.</p>
-    </div>
-    <div class="capabilities-list reveal reveal-delay-2">
-      <div class="cap-row"><span class="key">Voltaje BT</span><span class="val">hasta 1000V</span></div>
-      <div class="cap-row"><span class="key">Voltaje MT</span><span class="val">hasta 33kV</span></div>
-      <div class="cap-row"><span class="key">Matrícula ENRE</span><span class="val">Vigente</span></div>
-      <div class="cap-row"><span class="key">Cert. IRAM</span><span class="val">2024</span></div>
-      <div class="cap-row"><span class="key">Técnicos</span><span class="val">12 en campo</span></div>
-      <div class="cap-row"><span class="key">Ingenieros</span><span class="val">3 titulados</span></div>
-      <div class="cap-row"><span class="key">Taller</span><span class="val">CABA 240m²</span></div>
-      <div class="cap-row"><span class="key">Cobertura</span><span class="val">CABA + GBA</span></div>
-      <div class="cap-row"><span class="key">Vehículos</span><span class="val">5 utilitarios</span></div>
-      <div class="cap-row"><span class="key">Termógrafa IR</span><span class="val">Fluke TiX580</span></div>
-      <div class="cap-row"><span class="key">Megóhmetro</span><span class="val">5kV</span></div>
-      <div class="cap-row"><span class="key">Tierra</span><span class="val">Telurómetro</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="process" id="proceso">
-  <div class="process-head">
-    <div class="opener reveal">
-      <span class="opener-rule"></span>
-      <span class="opener-label">/ 05 — Proceso</span>
-    </div>
-    <h2 class="reveal reveal-delay-1">Cinco etapas. <span class="accent">Sin atajos.</span></h2>
-    <p class="reveal reveal-delay-2">Cada proyecto entra por la misma puerta y recorre el mismo camino. Lo que cambia es la escala, no el rigor.</p>
-  </div>
-  <div class="process-list">
-    <div class="process-step reveal">
-      <div class="step-num">01</div>
-      <div class="step-name">Diagnóstico de sitio</div>
-      <div class="step-desc">Visita técnica, levantamiento de cargas, estado de tableros, recorrido de canalizaciones. Entregamos acta con fotografías y mediciones.</div>
-      <div class="step-meta">1—3 DÍAS<br>SIN COSTO</div>
-    </div>
-    <div class="process-step reveal">
-      <div class="step-num">02</div>
-      <div class="step-name">Ingeniería y planos</div>
-      <div class="step-desc">Memoria de cálculo, planos unifilares, diagramas de control, especificaciones técnicas. Revisión con cliente antes de ejecución.</div>
-      <div class="step-meta">5—10 DÍAS<br>INCLUIDO</div>
-    </div>
-    <div class="process-step reveal">
-      <div class="step-num">03</div>
-      <div class="step-name">Ejecución</div>
-      <div class="step-desc">Instalación con técnicos propios, supervisión de ingeniero residente, bitácora de obra semanal. Coordinación con otras especialidades.</div>
-      <div class="step-meta">SEGÚN PROYECTO<br>EQUIPO DEDICADO</div>
-    </div>
-    <div class="process-step reveal">
-      <div class="step-num">04</div>
-      <div class="step-name">Pruebas y certificación</div>
-      <div class="step-desc">Protocolo completo de ensayos eléctricos, termografía, ajuste de protecciones. Informe firmado por ingeniero responsable. Certificación IRAM-IEC.</div>
-      <div class="step-meta">2—4 DÍAS<br>INFORME FIRMADO</div>
-    </div>
-    <div class="process-step reveal">
-      <div class="step-num">05</div>
-      <div class="step-name">Mantenimiento</div>
-      <div class="step-desc">Contrato preventivo calendarizado, respuesta correctiva &lt;4h, revisión termográfica anual. La instalación entra a nuestra memoria.</div>
-      <div class="step-meta">ANUAL<br>SLA 4H</div>
-    </div>
-  </div>
-</section>
-
-<section class="quote">
-  <div class="quote-mark reveal">"</div>
-  <p class="quote-text reveal reveal-delay-1">No medimos proyectos por metros de cable tendido, sino por horas de operación sin interrupción después de la entrega.</p>
-  <div class="quote-attr reveal reveal-delay-2">— CARLOS SANTA CRUZ · INGENIERO FUNDADOR · CSAN INGENIERÍA</div>
-</section>
-
+<!-- CONTACTO CON FORMULARIO -->
 <section class="contact" id="contacto">
-  <div class="opener reveal" style="justify-content: center;">
-    <span class="opener-rule"></span>
-    <span class="opener-label">/ 06 — Contacto</span>
-    <span class="opener-rule"></span>
-  </div>
-  <h2 class="reveal reveal-delay-1">Conversemos sobre su <span class="accent">próximo proyecto.</span></h2>
-  <a href="mailto:contacto@csaningenieria.com.ar" class="contact-cta reveal reveal-delay-2">
-    Solicitar diagnóstico <span class="btn-arrow">→</span>
-  </a>
-  <div class="contact-info">
-    <div class="contact-block reveal">
-      <div class="label-sm">/ Oficina central</div>
-      <div class="value">Av. Corrientes 3458, Piso 5<br>Ciudad Autónoma de Buenos Aires<br>Argentina · C1193AAJ</div>
-    </div>
-    <div class="contact-block reveal reveal-delay-1">
-      <div class="label-sm">/ Contacto directo</div>
-      <div class="value">
-        <a href="mailto:contacto@csaningenieria.com.ar">contacto@csaningenieria.com.ar</a><br>
-        <a href="tel:+541148912345">+54 11 4891 2345</a><br>
-        <a href="tel:+5491112345678">+54 9 11 1234 5678</a>
+  <div class="contact-inner">
+    <div>
+      <div class="hero-eyebrow reveal"><span></span>CONTACTO</div>
+      <h2 class="contact-title reveal">Hablemos de tu <span>próximo proyecto.</span></h2>
+      <p class="reveal" style="color: var(--text-soft); margin-bottom: 2rem;">Completá el formulario y un ingeniero de nuestro equipo te contactará a la brevedad para coordinar una visita técnica.</p>
+      
+      <div class="contact-details">
+        <div class="detail-block reveal">
+          <strong>Oficina Central</strong>
+          <p>Av. Corrientes 3458, Piso 5<br>CABA, Argentina · C1193AAJ</p>
+        </div>
+        <div class="detail-block reveal delay-1">
+          <strong>Contacto Directo</strong>
+          <a href="mailto:contacto@csaningenieria.com.ar">contacto@csaningenieria.com.ar</a><br>
+          <a href="tel:+541148912345">+54 11 4891 2345</a>
+        </div>
       </div>
     </div>
-    <div class="contact-block reveal reveal-delay-2">
-      <div class="label-sm">/ Horario</div>
-      <div class="value">Lunes a viernes · 08:00—18:00<br>Guardia 24/7 con contrato<br>Respuesta &lt;4h en SLA</div>
+
+    <!-- FORMULARIO -->
+    <div class="contact-form reveal delay-1">
+      <form action="https://formspree.io/f/TU_CODIGO_DE_FORMSPREE_AQUI" method="POST">
+        
+        <div class="form-group">
+          <label for="nombre">Nombre y Apellido</label>
+          <input type="text" id="nombre" name="nombre" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+          <label for="tel">Teléfono</label>
+          <input type="tel" id="tel" name="tel">
+        </div>
+
+        <div class="form-group">
+          <label for="servicio">Servicio de Interés</label>
+          <select id="servicio" name="servicio">
+            <option value="Instalaciones y Mantenimiento">Instalaciones y Mantenimiento</option>
+            <option value="Instalación Industrial y Comercial">Instalación Industrial y Comercial</option>
+            <option value="Tableros y Automatización">Tableros y Automatización</option>
+            <option value="Mantenimiento Preventivo">Mantenimiento Preventivo</option>
+            <option value="Corriente Crítica y UPS">Corriente Crítica y UPS</option>
+            <option value="Paneles Solares">Paneles Solares</option>
+            <option value="Domótica e Inmótica">Domótica e Inmótica</option>
+            <option value="Pruebas Eléctricas">Pruebas Eléctricas</option>
+            <option value="Cañerías Eléctricas">Cañerías Eléctricas</option>
+            <option value="Otro / No estoy seguro">Otro / No estoy seguro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="mensaje">Descripción del Proyecto</label>
+          <textarea id="mensaje" name="mensaje" placeholder="Contanos brevemente qué necesitás instalar, mantener o diagnosticar..." required></textarea>
+        </div>
+
+        <button type="submit" class="form-submit">Enviar Solicitud</button>
+        
+      </form>
     </div>
   </div>
 </section>
 
 <footer class="footer">
-  <div class="footer-grid">
-    <div style="display: flex; align-items: center; gap: 1rem;">
-      <img src="https://i.imgur.com/OWobKea.jpeg" alt="CSAN Ingeniería" class="footer-logo">
-      <span>2010—2025</span>
-    </div>
-    <div>ENRE · AEA · NORMA IRAM-IEC 60364</div>
-    <div>BUENOS AIRES · CABA · ARGENTINA</div>
-  </div>
+  <img src="https://i.imgur.com/OWobKea.jpeg" alt="CSAN" class="footer-logo">
+  <div>2010—2025 · CSAN Ingeniería · Todos los derechos reservados</div>
 </footer>
 
 <script>
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-(function initScrollProgress() {
-  const bar = document.getElementById('scroll-progress');
-  if (!bar) return;
-  let ticking = false;
-  function update() {
-    const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    bar.style.width = Math.min(100, Math.max(0, scrolled)) + '%';
-    ticking = false;
-  }
-  window.addEventListener('scroll', () => {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
-  }, { passive: true });
-  update();
-})();
-
-(function initNavScroll() {
-  const nav = document.getElementById('nav');
-  if (!nav) return;
-  let ticking = false;
-  function update() {
-    if (window.scrollY > 60) nav.classList.add('scrolled');
-    else nav.classList.remove('scrolled');
-    ticking = false;
-  }
-  window.addEventListener('scroll', () => {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
-  }, { passive: true });
-})();
-
-(function initHero() {
-  if (typeof gsap === 'undefined' || reduceMotion) {
-    ['#hero-eyebrow', '#hero-title', '#hero-sub', '#hero-cta'].forEach(sel => {
-      const el = document.querySelector(sel);
-      if (el) { el.style.opacity = 1; el.style.transform = 'none'; }
-    });
-    return;
-  }
-  const tl = gsap.timeline({ delay: 0.3 });
-  tl.fromTo('#hero-eyebrow', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' })
-    .fromTo('#hero-title',   { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out' }, '-=0.4')
-    .fromTo('#hero-sub',     { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6')
-    .fromTo('#hero-cta',     { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.5');
-})();
-
-(function initReveal() {
+document.addEventListener('DOMContentLoaded', () => {
+  // Reveal on scroll
   const reveals = document.querySelectorAll('.reveal');
-  if (!reveals.length) return;
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('is-in');
-        io.unobserve(e.target);
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
       }
     });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.1 });
+  }, { threshold: 0.1 });
   reveals.forEach(el => io.observe(el));
-})();
 
-(function initStackedCards() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  gsap.registerPlugin(ScrollTrigger);
+  // Interactive Services (CLICK)
+  const items = document.querySelectorAll('.service-item');
+  const images = document.querySelectorAll('.services-preview img');
+  
+  items.forEach(item => {
+    item.addEventListener('click', () => {
+      const id = item.dataset.img;
+      
+      items.forEach(i => i.classList.remove('is-active'));
+      item.classList.add('is-active');
 
-  const cards = document.querySelectorAll('.cardstack__card');
-  if (!cards.length) return;
-
-  function setInitial() {
-    cards.forEach((card, i) => {
-      gsap.set(card, {
-        y: i === 0 ? 0 : window.innerHeight * 0.6,
-        opacity: i === 0 ? 1 : 0,
-        scale: 1,
-        zIndex: i,
-        filter: 'brightness(1)'
-      });
+      images.forEach(img => img.classList.remove('active'));
+      const activeImg = document.getElementById(id);
+      if (activeImg) activeImg.classList.add('active');
     });
-  }
-  setInitial();
-
-  const seg = 1 / cards.length;
-
-  ScrollTrigger.create({
-    trigger: '#cardstack-pin',
-    start: 'top top',
-    end: '+=' + (cards.length * 75) + '%',
-    pin: true,
-    pinSpacing: true,
-    scrub: 1,
-    anticipatePin: 1,
-    invalidateOnRefresh: true,
-    onUpdate: (self) => {
-      cards.forEach((card, i) => {
-        const cp = gsap.utils.clamp(0, 1, (self.progress - i * seg) / seg);
-        const pp = gsap.utils.clamp(0, 1, (self.progress - (i - 1) * seg) / seg);
-
-        if (i === 0) {
-          gsap.set(card, {
-            y: 0,
-            opacity: 1 - cp * 0.4,
-            scale: 1 - cp * 0.05,
-            filter: 'brightness(' + (1 - cp * 0.35) + ')',
-            zIndex: i
-          });
-        } else if (i === cards.length - 1) {
-          gsap.set(card, {
-            y: (1 - pp) * window.innerHeight * 0.6,
-            opacity: pp,
-            scale: 1,
-            filter: 'brightness(1)',
-            zIndex: i
-          });
-        } else {
-          gsap.set(card, {
-            y: (1 - pp) * window.innerHeight * 0.6,
-            opacity: pp - cp * 0.4,
-            scale: 1 - cp * 0.05,
-            filter: 'brightness(' + (1 - cp * 0.35) + ')',
-            zIndex: i
-          });
-        }
-      });
-    },
-    onLeaveBack: setInitial
-  });
-})();
-
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', (e) => {
-    const href = a.getAttribute('href');
-    if (href === '#' || href.length < 2) return;
-    const target = document.querySelector(href);
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
   });
 });
 </script>
